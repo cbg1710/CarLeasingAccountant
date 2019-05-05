@@ -57,6 +57,22 @@ public class Vehicle {
         return result;
     }
 
+    public int getMaximumDistance() throws IOException {
+        return dataHandler.getData().getMaximumDistance();
+    }
+
+    public LocalDate getPickupDate() throws IOException {
+        return dataHandler.getData().getPickUpDay();
+    }
+
+    public LocalDate getReturnDate() throws IOException {
+        return dataHandler.getData().getReturnDay();
+    }
+
+    public String getVin() throws IOException {
+        return dataHandler.getData().getVin();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

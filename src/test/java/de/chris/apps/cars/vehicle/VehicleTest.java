@@ -8,7 +8,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VehicleTest {
 
@@ -67,5 +68,13 @@ class VehicleTest {
     public void getAlreadyPassedDays() throws IOException {
         assertTrue(vehicle.getPassedDays() >= 58
                 && vehicle.getPassedDays() <= 61);
+    }
+
+    @Test
+    public void startUpDataEquals() throws IOException {
+        assertEquals(VIN, vehicle.getVin());
+        assertEquals(PICK_UP, vehicle.getPickupDate());
+        assertEquals(RELEASE, vehicle.getReturnDate());
+        assertEquals(MAX_ODO, vehicle.getMaximumDistance());
     }
 }
