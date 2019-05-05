@@ -56,13 +56,13 @@ class DataHandler {
         dataFile.delete();
     }
 
-    public void setOdometer(int odometer) throws IOException {
+    void setOdometer(int odometer) throws IOException {
         Data data = getData();
         data.getCurrentOdometer().updateOdometer(odometer);
         writeDataToFile(data);
     }
 
-    public int getOdometer() throws IOException {
+    int getOdometer() throws IOException {
         return getData().getCurrentOdometer().getOdometer();
     }
 

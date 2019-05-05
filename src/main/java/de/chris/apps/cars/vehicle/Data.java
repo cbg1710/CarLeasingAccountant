@@ -38,23 +38,23 @@ public class Data {
         this.maximumDistance = maximumDistance;
     }
 
-    public String getVin() {
+    String getVin() {
         return vin;
     }
 
-    public LocalDate getPickUpDay() {
+    LocalDate getPickUpDay() {
         return pickUpDay;
     }
 
-    public LocalDate getReturnDay() {
+    LocalDate getReturnDay() {
         return returnDay;
     }
 
-    public int getMaximumDistance() {
+    int getMaximumDistance() {
         return maximumDistance;
     }
 
-    public CurrentOdometer getCurrentOdometer() {
+    CurrentOdometer getCurrentOdometer() {
         return currentOdometer;
     }
 
@@ -89,12 +89,12 @@ public class Data {
 
         CurrentOdometer() {}
 
-        public void updateOdometer(int odometer) {
+        void updateOdometer(int odometer) {
             this.odometer = odometer;
             odometerDay = LocalDateTime.now();
         }
 
-        public int getOdometer() {
+        int getOdometer() {
             return odometer;
         }
 
