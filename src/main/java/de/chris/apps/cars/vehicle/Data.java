@@ -10,8 +10,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 public class Data {
 
     @JsonProperty
@@ -77,6 +77,11 @@ public class Data {
 
     float getAverageDistancePerDay() {
         return currentOdometer.odometer / (float) getPassedDays();
+    }
+
+    float getDistanceDiff() {
+        float allowedDistance = getPassedDays() * getDistancePerDay();
+        return allowedDistance - currentOdometer.getOdometer();
     }
 
     @Override

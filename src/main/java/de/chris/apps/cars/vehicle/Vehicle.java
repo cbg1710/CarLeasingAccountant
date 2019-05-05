@@ -39,6 +39,12 @@ public class Vehicle {
         return result;
     }
 
+    public float getDistanceDifference() throws IOException {
+        float result = dataHandler.getData().getDistanceDiff();
+        LOG.info("Distance difference is {}", result);
+        return result;
+    }
+
     public float getDistancePerDay() throws IOException {
         float result = dataHandler.getData().getDistancePerDay();
         LOG.info("Distance per day {}", result);
@@ -92,7 +98,11 @@ public class Vehicle {
 
     public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay,
                                      int maxDistance) throws IOException {
-        DataHandler dataHandler = DataHandler.addNewVehicle(new Data(vin, pickUpDay, releaseDay, maxDistance));
+        return addVehicle(new Data(vin, pickUpDay, releaseDay, maxDistance));
+    }
+
+    public static Vehicle addVehicle(Data data) throws IOException {
+        DataHandler dataHandler = DataHandler.addNewVehicle(data);
         return new Vehicle(dataHandler);
     }
 
