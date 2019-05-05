@@ -1,11 +1,14 @@
 package de.chris.apps.cars.vehicle;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Objects;
 
 public class Vehicle {
-
+    private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
     private DataHandler dataHandler;
 
     private Vehicle (DataHandler dataHandler) {
@@ -22,6 +25,36 @@ public class Vehicle {
 
     public int getOdometer() throws IOException {
         return dataHandler.getOdometer();
+    }
+
+    public long getRemainingDays() throws IOException {
+        long result = dataHandler.getData().getRemainingDays();
+        LOG.info("Remaining rental days {}", result);
+        return result;
+    }
+
+    public int getRemainingDistance() throws IOException {
+        int result = dataHandler.getData().getRemainingDistance();
+        LOG.info("Remaining distance {}", result);
+        return result;
+    }
+
+    public float getDistancePerDay() throws IOException {
+        float result = dataHandler.getData().getDistancePerDay();
+        LOG.info("Distance per day {}", result);
+        return result;
+    }
+
+    public float getAverageDistancePerDay() throws IOException {
+        float result = dataHandler.getData().getAverageDistancePerDay();
+        LOG.info("Average distance per day {}", result);
+        return result;
+    }
+
+    public long getPassedDays() throws IOException {
+        long result = dataHandler.getData().getPassedDays();
+        LOG.info("Already passed days {}", result);
+        return result;
     }
 
     @Override

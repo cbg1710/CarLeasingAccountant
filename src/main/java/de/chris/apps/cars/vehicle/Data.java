@@ -11,7 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
+import java.time.temporal.ChronoUnit;
 public class Data {
 
     @JsonProperty
@@ -56,6 +56,27 @@ public class Data {
 
     CurrentOdometer getCurrentOdometer() {
         return currentOdometer;
+    }
+
+    long getRemainingDays() {
+        return ChronoUnit.DAYS.between(LocalDate.now(), returnDay);
+    }
+
+    long getPassedDays() {
+        return ChronoUnit.DAYS.between(pickUpDay, LocalDate.now());
+    }
+
+    int getRemainingDistance() {
+        return maximumDistance - currentOdometer.getOdometer();
+    }
+
+    float getDistancePerDay() {
+        long days = ChronoUnit.DAYS.between(pickUpDay, returnDay);
+        return maximumDistance / (float) days;
+    }
+
+    float getAverageDistancePerDay() {
+        return currentOdometer.odometer / (float) getPassedDays();
     }
 
     @Override

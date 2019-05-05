@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,10 +14,10 @@ class VehicleTest {
 
     private static final String VIN = "TEST_VIN";
     private static final LocalDate PICK_UP =
-            LocalDate.of(2019, 3, 9);
+            LocalDate.now().minusMonths(2);
     private static final LocalDate RELEASE = PICK_UP.plusYears(1);
-    private static final int MAX_ODO = 13099;
-    Vehicle vehicle;
+    private static final int MAX_ODO = 365;
+    private Vehicle vehicle;
 
     @BeforeEach
     public void setUp() throws IOException {
@@ -36,8 +36,36 @@ class VehicleTest {
     }
 
     @Test
+    public void getRemainingDays() throws IOException {
+        assertEquals(ChronoUnit.DAYS.between(LocalDate.now(), RELEASE),vehicle.getRemainingDays());
+    }
+
+    @Test
     public void updateOdometer() throws IOException {
         vehicle.updateOdometer(15);
         assertEquals(15, Vehicle.getVehicle(VIN).getOdometer());
+    }
+
+    @Test
+    public void getRemainingDistance() throws IOException {
+        updateOdometer();
+        assertEquals(MAX_ODO - 15, vehicle.getRemainingDistance());
+    }
+
+    @Test
+    public void getDistancePerDay() throws IOException {
+        assertEquals(1, Math.round(vehicle.getDistancePerDay()));
+    }
+
+    @Test
+    public void getAverageDistancePerDay() throws IOException {
+        vehicle.updateOdometer(61);
+        assertEquals(1, Math.round(vehicle.getAverageDistancePerDay()));
+    }
+
+    @Test
+    public void getAlreadyPassedDays() throws IOException {
+        assertTrue(vehicle.getPassedDays() >= 58
+                && vehicle.getPassedDays() <= 61);
     }
 }
