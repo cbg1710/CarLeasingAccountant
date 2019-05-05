@@ -13,14 +13,16 @@ class DataHandler {
     private static final String FILE_EXTENSION = ".JSON";
 
     private File dataFile;
-
-    private DataHandler(String vin) throws IOException {
-        createDir();
-        dataFile = createDataFile(vin);
-    }
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private DataHandler(File dataFile) {
         this.dataFile = dataFile;
+    }
+
+    private DataHandler(Data data) throws IOException {
+        createDir();
+        dataFile = createDataFile(data.getVin());
+        writeDataToFile(data);
     }
 
     private void createDir() {
@@ -33,10 +35,16 @@ class DataHandler {
     private File createDataFile(String vin) throws IOException {
         File result = new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
         if (!result.exists()) {
-            LOG.info("Create new vehicle data file of vin {}", vin);
+            LOG.info("Create new vehicle data file {}", result.getName());
             result.createNewFile();
         }
         return result;
+    }
+
+    private void writeDataToFile(Data data) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(dataFile)) {
+            objectMapper.writeValue(fos, data);
+        }
     }
 
     File getDataFile() {
@@ -44,15 +52,22 @@ class DataHandler {
     }
 
     void deleteDataFile() {
+        LOG.warn("Delete data file {}", dataFile.getName());
         dataFile.delete();
     }
 
     public void setOdometer(int odometer) throws IOException {
-        getData().getCurrentOdometer().updateOdometer(odometer);
+        Data data = getData();
+        data.getCurrentOdometer().updateOdometer(odometer);
+        writeDataToFile(data);
+    }
+
+    public int getOdometer() throws IOException {
+        return getData().getCurrentOdometer().getOdometer();
     }
 
     Data getData() throws IOException {
-        return new ObjectMapper().readValue(dataFile, Data.class);
+        return objectMapper.readValue(dataFile, Data.class);
     }
 
     @Override
@@ -73,13 +88,7 @@ class DataHandler {
     }
 
     static DataHandler addNewVehicle(Data data) throws IOException {
-        String json = new ObjectMapper().writeValueAsString(data);
-        DataHandler result = new DataHandler(data.getVin());
-        try (FileWriter file = new FileWriter(result.getDataFile())) {
-            file.write(json);
-            LOG.info("Wrote {} to file", json);
-        }
-        return result;
+        return new DataHandler(data);
     }
 
     static DataHandler getDataHandler(String vin) {

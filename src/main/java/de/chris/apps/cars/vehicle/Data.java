@@ -85,13 +85,17 @@ public class Data {
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime odometerDay = null;
         @JsonProperty
-        int currentOdometer = 0;
+        int odometer = 0;
 
         CurrentOdometer() {}
 
-        public void updateOdometer(int currentOdometer) {
-            this.currentOdometer = currentOdometer;
+        public void updateOdometer(int odometer) {
+            this.odometer = odometer;
             odometerDay = LocalDateTime.now();
+        }
+
+        public int getOdometer() {
+            return odometer;
         }
 
         @Override
@@ -103,13 +107,13 @@ public class Data {
                 return false;
             }
             CurrentOdometer that = (CurrentOdometer) o;
-            return currentOdometer == that.currentOdometer &&
+            return odometer == that.odometer &&
                     Objects.equals(odometerDay, that.odometerDay);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(odometerDay, currentOdometer);
+            return Objects.hash(odometerDay, odometer);
         }
     }
 }

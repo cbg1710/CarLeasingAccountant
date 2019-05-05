@@ -40,6 +40,12 @@ class DataHandlerTest {
         assertEquals(data, actual);
     }
 
+    @Test
+    public void getDataHandlerWhichDontExists() {
+        assertThrows(VehicleNotExisting.class,
+                () -> DataHandler.getDataHandler("NOT_THERE"));
+    }
+
     @AfterAll
     public void cleanUp() {
         dataHandler.deleteDataFile();

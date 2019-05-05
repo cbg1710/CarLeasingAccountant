@@ -34,4 +34,10 @@ class VehicleTest {
         Vehicle actual = Vehicle.getVehicle(VIN);
         assertEquals(actual, vehicle);
     }
+
+    @Test
+    public void updateOdometer() throws IOException {
+        vehicle.updateOdometer(15);
+        assertEquals(15, Vehicle.getVehicle(VIN).getOdometer());
+    }
 }

@@ -2,7 +2,6 @@ package de.chris.apps.cars.vehicle;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Vehicle {
@@ -19,6 +18,10 @@ public class Vehicle {
 
     public void updateOdometer(int odometer) throws IOException {
         dataHandler.setOdometer(odometer);
+    }
+
+    public int getOdometer() throws IOException {
+        return dataHandler.getOdometer();
     }
 
     @Override
