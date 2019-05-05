@@ -1,7 +1,5 @@
 package de.chris.apps.cars.vehicle;
 
-import org.apache.regexp.RE;
-import org.hibernate.validator.constraints.br.TituloEleitoral;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -44,6 +42,12 @@ class DataHandlerTest {
     public void getDataHandlerWhichDontExists() {
         assertThrows(VehicleNotExisting.class,
                 () -> DataHandler.getDataHandler("NOT_THERE"));
+    }
+
+    @Test
+    public void getDataHandlerAlreadyExists() {
+        assertThrows(VehicleAlreadyExists.class,
+                () -> DataHandler.addNewVehicle(data));
     }
 
     @AfterAll

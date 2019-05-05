@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Objects;
 
 class DataHandler {
@@ -88,20 +90,33 @@ class DataHandler {
     }
 
     static DataHandler addNewVehicle(Data data) throws IOException {
+        if (getDataFile(data.getVin()).exists()) {
+            throw new VehicleAlreadyExists(data.getVin());
+        }
         return new DataHandler(data);
     }
 
     static DataHandler getDataHandler(String vin) {
-        File dataFile = new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
-        if (!dataFile.exists()) {
+        File file = getDataFile(vin);
+        if (!file.exists()) {
             throw new VehicleNotExisting(vin);
         }
-        return new DataHandler(dataFile);
+        return new DataHandler(file);
+    }
+
+    private static File getDataFile(String vin) {
+        return new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
     }
 }
 
 class VehicleNotExisting extends RuntimeException {
     VehicleNotExisting(String vin) {
         super("Vehicle with vin: " + vin + " not existing");
+    }
+}
+
+class VehicleAlreadyExists extends RuntimeException {
+    VehicleAlreadyExists(String vin) {
+        super("Vehicle with vin: " + vin + " already exists");
     }
 }
