@@ -24,3 +24,5 @@ target/
 
 #Vehicle JSON
 vehicles/
+
+local.properties

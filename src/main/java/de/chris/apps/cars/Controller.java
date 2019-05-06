@@ -1,5 +1,6 @@
 package de.chris.apps.cars;
 
+import de.chris.apps.cars.entitiy.Overview;
 import de.chris.apps.cars.vehicle.Data;
 import de.chris.apps.cars.vehicle.Vehicle;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class Controller {
     }
 
     @RequestMapping(value = "/updateOdo", method = RequestMethod.POST)
-    public ResponseEntity<Void> updateOdometer(@RequestBody String vin, @RequestParam int odo) throws IOException {
+    public ResponseEntity<Void> updateOdometer(@RequestParam String vin, @RequestParam int odo) throws IOException {
         Vehicle.getVehicle(vin).updateOdometer(odo);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -28,4 +29,8 @@ public class Controller {
         return new ResponseEntity<>(Vehicle.getVehicle(vin).getDistanceDifference(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/getOverview", method = RequestMethod.GET)
+    public ResponseEntity<Overview> getOverview(@RequestParam String vin) throws IOException {
+        return new ResponseEntity<>(new Overview(Vehicle.getVehicle(vin)), HttpStatus.OK);
+    }
 }

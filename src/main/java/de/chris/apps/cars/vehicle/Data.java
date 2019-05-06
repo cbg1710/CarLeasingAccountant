@@ -4,12 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 public class Data {
@@ -105,11 +102,11 @@ public class Data {
         return Objects.hash(vin, pickUpDay, returnDay, maximumDistance, currentOdometer);
     }
 
-    static class CurrentOdometer {
+    public static class CurrentOdometer {
         @JsonProperty
-        @JsonSerialize(using = LocalDateTimeSerializer.class)
-        @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-        LocalDateTime odometerDay = null;
+        @JsonSerialize(using = LocalDateSerializer.class)
+        @JsonDeserialize(using = LocalDateDeserializer.class)
+        LocalDate odometerDay = null;
         @JsonProperty
         int odometer = 0;
 
@@ -117,7 +114,7 @@ public class Data {
 
         void updateOdometer(int odometer) {
             this.odometer = odometer;
-            odometerDay = LocalDateTime.now();
+            odometerDay = LocalDate.now();
         }
 
         int getOdometer() {

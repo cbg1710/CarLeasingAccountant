@@ -68,6 +68,10 @@ class DataHandler {
         return getData().getCurrentOdometer().getOdometer();
     }
 
+    Data.CurrentOdometer getCurrentOdometer() throws IOException {
+        return getData().getCurrentOdometer();
+    }
+
     Data getData() throws IOException {
         return objectMapper.readValue(dataFile, Data.class);
     }

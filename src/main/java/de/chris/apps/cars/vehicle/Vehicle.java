@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -27,6 +29,10 @@ public class Vehicle {
         return dataHandler.getOdometer();
     }
 
+    public Data.CurrentOdometer getCurrentOdometer() throws IOException {
+        return dataHandler.getCurrentOdometer();
+    }
+
     public long getRemainingDays() throws IOException {
         long result = dataHandler.getData().getRemainingDays();
         LOG.info("Remaining rental days {}", result);
@@ -40,21 +46,27 @@ public class Vehicle {
     }
 
     public float getDistanceDifference() throws IOException {
-        float result = dataHandler.getData().getDistanceDiff();
+        float result = round(dataHandler.getData().getDistanceDiff());
         LOG.info("Distance difference is {}", result);
         return result;
     }
 
     public float getDistancePerDay() throws IOException {
-        float result = dataHandler.getData().getDistancePerDay();
+        float result = round(dataHandler.getData().getDistancePerDay());
         LOG.info("Distance per day {}", result);
         return result;
     }
 
     public float getAverageDistancePerDay() throws IOException {
-        float result = dataHandler.getData().getAverageDistancePerDay();
+        float result = round(dataHandler.getData().getAverageDistancePerDay());
         LOG.info("Average distance per day {}", result);
         return result;
+    }
+
+    private float round(float value) {
+        BigDecimal result = new BigDecimal(Float.toString(value));
+        result = result.setScale(2, RoundingMode.HALF_UP);
+        return result.floatValue();
     }
 
     public long getPassedDays() throws IOException {
