@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker run -p 8080:8080 -t glaesec/leaseing-accountant:latest
+docker run -p 8080:8080 -v /home/pi/vehicles:/vehicles -t glaesec/leasing-accountant:latest
