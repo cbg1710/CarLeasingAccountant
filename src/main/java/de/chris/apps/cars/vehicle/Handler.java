@@ -125,16 +125,3 @@ public class Handler {
         return result.floatValue();
     }
 }
-
-
-class VehicleNotExisting extends RuntimeException {
-    VehicleNotExisting(String vin) {
-        super("Vehicle with vin: " + vin + " not existing");
-    }
-}
-
-class VehicleAlreadyExists extends RuntimeException {
-    VehicleAlreadyExists(String vin) {
-        super("Vehicle with vin: " + vin + " already exists");
-    }
-}
