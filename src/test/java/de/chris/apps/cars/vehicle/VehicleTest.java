@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -45,6 +46,22 @@ class VehicleTest {
     public void updateOdometer() throws IOException {
         vehicle.updateOdometer(15);
         assertEquals(15, Vehicle.getVehicle(VIN).getOdometer());
+
+    }
+
+    @Test
+    public void checkHistory() throws IOException {
+        updateOdometer();
+        Map<LocalDate, History> map = Vehicle.getVehicle(VIN).getHistoryMap();
+        History expectedHistory = new History(15, 20);
+        assertEquals(expectedHistory.getDistance(), map.get(LocalDate.now()).getDistance());
+    }
+
+    @Test
+    public void updateOdoMeterTwice() throws IOException {
+        checkHistory();
+        updateOdometer();
+        assertEquals(1, Vehicle.getVehicle(VIN).getHistoryMap().size());
     }
 
     @Test

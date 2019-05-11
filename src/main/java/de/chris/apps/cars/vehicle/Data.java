@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -62,16 +64,25 @@ public class Data {
 
     float getDistancePerDay() {
         long days = ChronoUnit.DAYS.between(pickUpDay, returnDay);
-        return maximumDistance / (float) days;
+        return round(maximumDistance / (float) days);
     }
 
     float getAverageDistancePerDay() {
-        return currentOdometer.odometer / (float) getPassedDays();
+        return round(currentOdometer.odometer / (float) getPassedDays());
     }
 
     float getDistanceDiff() {
-        float allowedDistance = getPassedDays() * getDistancePerDay();
-        return allowedDistance - currentOdometer.getOdometer();
+        return round(getAllowedDistance() - currentOdometer.getOdometer());
+    }
+
+    float getAllowedDistance() {
+        return round(getPassedDays() * getDistancePerDay());
+    }
+
+    private static float round(float value) {
+        BigDecimal result = new BigDecimal(Float.toString(value));
+        result = result.setScale(2, RoundingMode.HALF_UP);
+        return result.floatValue();
     }
 
     @Override

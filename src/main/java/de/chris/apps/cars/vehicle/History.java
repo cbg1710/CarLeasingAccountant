@@ -8,11 +8,11 @@ public class History {
     @JsonProperty
     int distance = 0;
     @JsonProperty
-    int allowedDistance = 0;
+    float allowedDistance = 0;
 
     public History() {}
 
-    public History(int distance, int allowedDistance) {
+    public History(int distance, float allowedDistance) {
         this.distance = distance;
         this.allowedDistance = allowedDistance;
     }
@@ -21,16 +21,8 @@ public class History {
         return distance;
     }
 
-    public void setDistance(int distance) {
-        this.distance = distance;
-    }
-
-    public int getAllowedDistance() {
+    public float getAllowedDistance() {
         return allowedDistance;
-    }
-
-    public void setAllowedDistance(int allowedDistance) {
-        this.allowedDistance = allowedDistance;
     }
 
     @Override
@@ -44,6 +36,14 @@ public class History {
         History history = (History) o;
         return distance == history.distance &&
                 allowedDistance == history.allowedDistance;
+    }
+
+    @Override
+    public String toString() {
+        return "[History:"
+                + " allowedDistance=" + allowedDistance
+                + " distance=" + distance
+                + "]";
     }
 
     @Override

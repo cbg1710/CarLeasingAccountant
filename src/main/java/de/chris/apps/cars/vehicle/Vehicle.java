@@ -4,9 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
 
 public class Vehicle {
@@ -34,45 +33,27 @@ public class Vehicle {
     }
 
     public long getRemainingDays() throws IOException {
-        long result = dataHandler.getData().getRemainingDays();
-        LOG.info("Remaining rental days {}", result);
-        return result;
+        return dataHandler.getData().getRemainingDays();
     }
 
     public int getRemainingDistance() throws IOException {
-        int result = dataHandler.getData().getRemainingDistance();
-        LOG.info("Remaining distance {}", result);
-        return result;
+        return dataHandler.getData().getRemainingDistance();
     }
 
     public float getDistanceDifference() throws IOException {
-        float result = round(dataHandler.getData().getDistanceDiff());
-        LOG.info("Distance difference is {}", result);
-        return result;
+        return dataHandler.getData().getDistanceDiff();
     }
 
     public float getDistancePerDay() throws IOException {
-        float result = round(dataHandler.getData().getDistancePerDay());
-        LOG.info("Distance per day {}", result);
-        return result;
+        return dataHandler.getData().getDistancePerDay();
     }
 
     public float getAverageDistancePerDay() throws IOException {
-        float result = round(dataHandler.getData().getAverageDistancePerDay());
-        LOG.info("Average distance per day {}", result);
-        return result;
-    }
-
-    private float round(float value) {
-        BigDecimal result = new BigDecimal(Float.toString(value));
-        result = result.setScale(2, RoundingMode.HALF_UP);
-        return result.floatValue();
+        return dataHandler.getData().getAverageDistancePerDay();
     }
 
     public long getPassedDays() throws IOException {
-        long result = dataHandler.getData().getPassedDays();
-        LOG.info("Already passed days {}", result);
-        return result;
+        return dataHandler.getData().getPassedDays();
     }
 
     public int getMaximumDistance() throws IOException {
@@ -89,6 +70,10 @@ public class Vehicle {
 
     public String getVin() throws IOException {
         return dataHandler.getJsonData().getVin();
+    }
+
+    public Map<LocalDate, History> getHistoryMap() throws IOException {
+        return dataHandler.getJsonData().getHistoryMap();
     }
 
     @Override

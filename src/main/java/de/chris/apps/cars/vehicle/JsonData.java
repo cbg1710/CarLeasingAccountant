@@ -49,8 +49,8 @@ public class JsonData {
         return historyMap;
     }
 
-    public void addHistory(LocalDate date, History history) {
-        historyMap.put(date, history);
+    public void addHistory(History history) {
+        historyMap.put(LocalDate.now(), history);
     }
 
     @Override
