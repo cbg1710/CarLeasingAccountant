@@ -1,6 +1,7 @@
 package de.chris.apps.cars;
 
 import de.chris.apps.cars.entitiy.Overview;
+import de.chris.apps.cars.vehicle.History;
 import de.chris.apps.cars.vehicle.JsonData;
 import de.chris.apps.cars.vehicle.Vehicle;
 import io.swagger.annotations.ApiOperation;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.Map;
 
 @RestController
 public class Controller {
@@ -40,17 +43,26 @@ public class Controller {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = Float.class),
             @ApiResponse(code = 500, message = "Vehicle does not exist or could not get file")})
-    @RequestMapping(value = "/getDistanceDiff", method = RequestMethod.GET)
+    @RequestMapping(value = "/getDistanceDiff", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Float> getDistanceDiff(@RequestParam String vin) throws IOException {
         return new ResponseEntity<>(Vehicle.getVehicle(vin).getDistanceDifference(), HttpStatus.OK);
     }
 
     @ApiOperation(value = "Get an overview about your leasing data.")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Success", response = Float.class),
+            @ApiResponse(code = 200, message = "Success", response = Overview.class),
             @ApiResponse(code = 500, message = "Vehicle does not exist or could not get file")})
-    @RequestMapping(value = "/getOverview", method = RequestMethod.GET)
+    @RequestMapping(value = "/getOverview", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<Overview> getOverview(@RequestParam String vin) throws IOException {
         return new ResponseEntity<>(new Overview(Vehicle.getVehicle(vin)), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Get an overview about your leasing data.")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Success"),
+            @ApiResponse(code = 500, message = "Vehicle does not exist or could not get file")})
+    @RequestMapping(value = "/getHistory", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<Map<LocalDate, History>> getHistory(@RequestParam String vin) throws IOException {
+        return new ResponseEntity<>(Vehicle.getVehicle(vin).getHistoryMap(), HttpStatus.OK);
     }
 }

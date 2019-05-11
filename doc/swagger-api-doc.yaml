@@ -1,0 +1,245 @@
+swagger: '2.0'
+info:
+  description: This gives you an overview over your Car Leasing contract. Especially about how much distance in kilometers you allowed to drive
+  version: 1.0.0
+  title: Car-Leasing accountant
+  contact:
+    name: cgb1710
+    url: 'https://github.com/cbg1710'
+  license:
+    name: MIT License
+host: 'localhost:8080'
+basePath: /
+tags:
+  - name: controller
+    description: Controller
+paths:
+  /getDistanceDiff:
+    get:
+      tags:
+        - controller
+      summary: Get the distance difference in kilometers. When the number is positive these are the kilometers you saved till today.
+      operationId: getDistanceDiffUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: vin
+          in: query
+          description: vin
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: number
+            format: float
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Vehicle does not exist or could not get file
+      deprecated: false
+  /getHistory:
+    get:
+      tags:
+        - controller
+      summary: Get an overview about your leasing data.
+      operationId: getHistoryUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: vin
+          in: query
+          description: vin
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/definitions/History'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Vehicle does not exist or could not get file
+      deprecated: false
+  /getOverview:
+    get:
+      tags:
+        - controller
+      summary: Get an overview about your leasing data.
+      operationId: getOverviewUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: vin
+          in: query
+          description: vin
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            $ref: '#/definitions/Overview'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Vehicle does not exist or could not get file
+      deprecated: false
+  /newVehicle:
+    post:
+      tags:
+        - controller
+      summary: Adding a new vehicle
+      operationId: addVehicleUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: data
+          description: data
+          required: true
+          schema:
+            $ref: '#/definitions/JsonData'
+      responses:
+        '200':
+          description: Vehicle added successfully
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Vehicle file not found or vehicle is already existing
+      deprecated: false
+  /updateOdo:
+    post:
+      tags:
+        - controller
+      summary: Update the odometer of a vehicle in kilometers
+      operationId: updateOdometerUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - name: odo
+          in: query
+          description: odo
+          required: true
+          type: integer
+          format: int32
+        - name: vin
+          in: query
+          description: vin
+          required: true
+          type: string
+      responses:
+        '200':
+          description: Odometer update was successful
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Vehicle does not exist or could not get file
+      deprecated: false
+definitions:
+  CurrentOdometer:
+    type: object
+    properties:
+      odometer:
+        type: integer
+        format: int32
+      odometerDay:
+        type: string
+        format: date
+    title: CurrentOdometer
+  Data:
+    type: object
+    properties:
+      currentOdometer:
+        $ref: '#/definitions/CurrentOdometer'
+      maximumDistance:
+        type: integer
+        format: int32
+      pickUpDay:
+        type: string
+        format: date
+      returnDay:
+        type: string
+        format: date
+    title: Data
+  History:
+    type: object
+    properties:
+      allowedDistance:
+        type: number
+        format: float
+      distance:
+        type: integer
+        format: int32
+    title: History
+  JsonData:
+    type: object
+    properties:
+      data:
+        $ref: '#/definitions/Data'
+      history:
+        type: object
+        additionalProperties:
+          $ref: '#/definitions/History'
+      vin:
+        type: string
+    title: JsonData
+  Overview:
+    type: object
+    properties:
+      allowedDistancePerDay:
+        type: number
+        format: float
+      averageDistancePerDay:
+        type: number
+        format: float
+      currentOdometer:
+        $ref: '#/definitions/CurrentOdometer'
+      distanceDifference:
+        type: number
+        format: float
+      maximumDistance:
+        type: integer
+        format: int32
+      remainingDays:
+        type: integer
+        format: int64
+      remainingDistance:
+        type: integer
+        format: int32
+      returnDay:
+        type: string
+        format: date
+    title: Overview
