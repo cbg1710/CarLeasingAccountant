@@ -1,6 +1,5 @@
 package de.chris.apps.cars.vehicle;
 
-import de.chris.apps.cars.vehicle.history.History;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -8,6 +7,8 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -21,12 +22,15 @@ class HandlerTest {
 
     private Handler dataHandler;
     private JsonData jsonData;
-    private History firstDay = new History(PICK_UP, 10, 20);
-    private History secondDay = new History(PICK_UP.plusDays(1), 15, 40);
+    private History firstDay = new History(10, 20);
+    private History secondDay = new History(15, 40);
 
     @BeforeAll
     public void setUp() throws IOException {
-        jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), firstDay, secondDay);
+        Map<LocalDate, History> map = new HashMap<>();
+        map.put(PICK_UP, firstDay);
+        map.put(PICK_UP.plusDays(1), secondDay);
+        jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), map);
         dataHandler = Handler.addNewVehicle(jsonData);
     }
 
@@ -51,12 +55,6 @@ class HandlerTest {
     public void getDataHandlerAlreadyExists() {
         assertThrows(VehicleAlreadyExists.class,
                 () -> Handler.addNewVehicle(jsonData));
-    }
-
-    @Test
-    public void getHistory() {
-        assertTrue(jsonData.getHistoryList().contains(firstDay));
-        assertTrue(jsonData.getHistoryList().contains(secondDay));
     }
 
     @AfterAll

@@ -1,12 +1,13 @@
 package de.chris.apps.cars.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.google.common.base.Objects;
-import de.chris.apps.cars.vehicle.history.History;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 public class JsonData {
 
@@ -14,21 +15,22 @@ public class JsonData {
     private String vin = null;
     @JsonProperty
     private Data data = null;
-    @JsonProperty
-    private List<History> historyList = new ArrayList<>();
+    @JsonProperty("history")
+    @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
+    private Map<LocalDate, History> historyMap = null;
 
     public JsonData() {}
 
     public JsonData(String vin, Data data) {
         this.vin = vin;
         this.data = data;
+        historyMap = new HashMap<>();
     }
 
-
-    public JsonData(String vin, Data data, History... histories) {
+    public JsonData(String vin, Data data, Map<LocalDate, History> historyMap) {
         this.vin = vin;
         this.data = data;
-        this.historyList = Arrays.asList(histories);
+        this.historyMap = historyMap;
     }
 
     public String getVin() {
@@ -43,12 +45,12 @@ public class JsonData {
         return data;
     }
 
-    public List<History> getHistoryList() {
-        return historyList;
+    public Map<LocalDate, History> getHistoryMap() {
+        return historyMap;
     }
 
-    public void addHistory(History history) {
-        historyList.add(history);
+    public void addHistory(LocalDate date, History history) {
+        historyMap.put(date, history);
     }
 
     @Override
@@ -62,11 +64,11 @@ public class JsonData {
         JsonData jsonData = (JsonData) o;
         return Objects.equal(vin, jsonData.vin) &&
                 Objects.equal(data, jsonData.data) &&
-                Objects.equal(historyList, jsonData.historyList);
+                Objects.equal(historyMap, jsonData.historyMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(vin, data, historyList);
+        return Objects.hashCode(vin, data, historyMap);
     }
 }
