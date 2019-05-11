@@ -1,7 +1,7 @@
 package de.chris.apps.cars;
 
 import de.chris.apps.cars.entitiy.Overview;
-import de.chris.apps.cars.vehicle.Data;
+import de.chris.apps.cars.vehicle.JsonData;
 import de.chris.apps.cars.vehicle.Vehicle;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.io.IOException;
 public class Controller {
 
     @RequestMapping(value = "/newVehicle", method = RequestMethod.POST)
-    public ResponseEntity<Void> addVehicle(@RequestBody Data data) throws IOException {
+    public ResponseEntity<Void> addVehicle(@RequestBody JsonData data) throws IOException {
         Vehicle.addVehicle(data);
         return new ResponseEntity<>(HttpStatus.OK);
     }

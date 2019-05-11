@@ -33,7 +33,7 @@ class VehicleTest {
     @Test
     public void getExitingVehicle() {
         Vehicle actual = Vehicle.getVehicle(VIN);
-        assertEquals(actual, vehicle);
+        assertEquals(vehicle, actual);
     }
 
     @Test

@@ -1,30 +1,30 @@
 package de.chris.apps.cars.vehicle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 
-class DataHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(DataHandler.class);
+public class Handler {
+    private static final Logger LOG = LoggerFactory.getLogger(Handler.class);
     private static final String DIRECTORY_PATH = "vehicles";
     private static final String FILE_EXTENSION = ".JSON";
 
-    private File dataFile;
+    private File jsonDataFile;
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private DataHandler(File dataFile) {
-        this.dataFile = dataFile;
+    protected Handler(File jsonDataFile) {
+        this.jsonDataFile = jsonDataFile;
     }
 
-    private DataHandler(Data data) throws IOException {
+    protected Handler(JsonData jsonData) throws IOException {
         createDir();
-        dataFile = createDataFile(data.getVin());
-        writeDataToFile(data);
+        jsonDataFile = createDataFile(jsonData);
+        writeDataToFile(jsonData);
     }
 
     private void createDir() {
@@ -34,8 +34,8 @@ class DataHandler {
         }
     }
 
-    private File createDataFile(String vin) throws IOException {
-        File result = new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
+    private File createDataFile(JsonData jsonData) throws IOException {
+        File result = new File(DIRECTORY_PATH + "/" + jsonData.getVin() + FILE_EXTENSION);
         if (!result.exists()) {
             LOG.info("Create new vehicle data file {}", result.getName());
             result.createNewFile();
@@ -43,37 +43,41 @@ class DataHandler {
         return result;
     }
 
-    private void writeDataToFile(Data data) throws IOException {
-        try (FileOutputStream fos = new FileOutputStream(dataFile)) {
-            objectMapper.writeValue(fos, data);
+    private void writeDataToFile(JsonData jsonData) throws IOException {
+        try (FileOutputStream fos = new FileOutputStream(jsonDataFile)) {
+            objectMapper.writeValue(fos, jsonData);
         }
     }
 
     File getDataFile() {
-        return dataFile;
+        return jsonDataFile;
     }
 
     void deleteDataFile() {
-        LOG.warn("Delete data file {}", dataFile.getName());
-        dataFile.delete();
+        LOG.warn("Delete data file {}", jsonDataFile.getName());
+        jsonDataFile.delete();
+    }
+
+    JsonData getJsonData() throws IOException {
+        return objectMapper.readValue(jsonDataFile, JsonData.class);
+    }
+
+    Data getData() throws IOException {
+        return getJsonData().getData();
     }
 
     void setOdometer(int odometer) throws IOException {
-        Data data = getData();
-        data.getCurrentOdometer().updateOdometer(odometer);
+        JsonData data = getJsonData();
+        data.getData().getCurrentOdometer().updateOdometer(odometer);
         writeDataToFile(data);
     }
 
     int getOdometer() throws IOException {
-        return getData().getCurrentOdometer().getOdometer();
+        return getJsonData().getData().getCurrentOdometer().getOdometer();
     }
 
     Data.CurrentOdometer getCurrentOdometer() throws IOException {
-        return getData().getCurrentOdometer();
-    }
-
-    Data getData() throws IOException {
-        return objectMapper.readValue(dataFile, Data.class);
+        return getJsonData().getData().getCurrentOdometer();
     }
 
     @Override
@@ -84,34 +88,35 @@ class DataHandler {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        DataHandler that = (DataHandler) o;
-        return Objects.equals(dataFile, that.dataFile);
+        Handler handler = (Handler) o;
+        return Objects.equal(jsonDataFile, handler.jsonDataFile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataFile);
+        return Objects.hashCode(jsonDataFile);
     }
 
-    static DataHandler addNewVehicle(Data data) throws IOException {
+    static Handler addNewVehicle(JsonData data) throws IOException {
         if (getDataFile(data.getVin()).exists()) {
             throw new VehicleAlreadyExists(data.getVin());
         }
-        return new DataHandler(data);
+        return new Handler(data);
     }
 
-    static DataHandler getDataHandler(String vin) {
+    static Handler getDataHandler(String vin) {
         File file = getDataFile(vin);
         if (!file.exists()) {
             throw new VehicleNotExisting(vin);
         }
-        return new DataHandler(file);
+        return new Handler(file);
     }
 
     private static File getDataFile(String vin) {
         return new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
     }
 }
+
 
 class VehicleNotExisting extends RuntimeException {
     VehicleNotExisting(String vin) {

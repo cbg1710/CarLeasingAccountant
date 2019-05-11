@@ -11,13 +11,13 @@ import java.util.Objects;
 
 public class Vehicle {
     private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
-    private DataHandler dataHandler;
+    private Handler dataHandler;
 
-    private Vehicle (DataHandler dataHandler) {
+    private Vehicle (Handler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
-    DataHandler getDataHandler() {
+    Handler getDataHandler() {
         return dataHandler;
     }
 
@@ -88,7 +88,7 @@ public class Vehicle {
     }
 
     public String getVin() throws IOException {
-        return dataHandler.getData().getVin();
+        return dataHandler.getJsonData().getVin();
     }
 
     @Override
@@ -110,15 +110,15 @@ public class Vehicle {
 
     public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay,
                                      int maxDistance) throws IOException {
-        return addVehicle(new Data(vin, pickUpDay, releaseDay, maxDistance));
+        return addVehicle(new JsonData(vin, new Data(pickUpDay, releaseDay, maxDistance)));
     }
 
-    public static Vehicle addVehicle(Data data) throws IOException {
-        DataHandler dataHandler = DataHandler.addNewVehicle(data);
+    public static Vehicle addVehicle(JsonData data) throws IOException {
+        Handler dataHandler = Handler.addNewVehicle(data);
         return new Vehicle(dataHandler);
     }
 
     public static Vehicle getVehicle(String vin) {
-        return new Vehicle(DataHandler.getDataHandler(vin));
+        return new Vehicle(Handler.getDataHandler(vin));
     }
 }

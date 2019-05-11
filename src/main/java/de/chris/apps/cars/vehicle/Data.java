@@ -12,8 +12,6 @@ import java.util.Objects;
 public class Data {
 
     @JsonProperty
-    private String vin = null;
-    @JsonProperty
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate pickUpDay = null;
@@ -28,15 +26,10 @@ public class Data {
 
     Data() {}
 
-    Data(String vin, LocalDate pickUpDay, LocalDate returnDay, int maximumDistance) {
-        this.vin = vin;
+    Data(LocalDate pickUpDay, LocalDate returnDay, int maximumDistance) {
         this.pickUpDay = pickUpDay;
         this.returnDay = returnDay;
         this.maximumDistance = maximumDistance;
-    }
-
-    String getVin() {
-        return vin;
     }
 
     LocalDate getPickUpDay() {
@@ -91,7 +84,6 @@ public class Data {
         }
         Data data = (Data) o;
         return maximumDistance == data.maximumDistance &&
-                Objects.equals(vin, data.vin) &&
                 Objects.equals(pickUpDay, data.pickUpDay) &&
                 Objects.equals(returnDay, data.returnDay) &&
                 Objects.equals(currentOdometer, data.currentOdometer);
@@ -99,7 +91,7 @@ public class Data {
 
     @Override
     public int hashCode() {
-        return Objects.hash(vin, pickUpDay, returnDay, maximumDistance, currentOdometer);
+        return Objects.hash(pickUpDay, returnDay, maximumDistance, currentOdometer);
     }
 
     public static class CurrentOdometer {
