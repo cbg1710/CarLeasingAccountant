@@ -5,8 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Vehicle {
     private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
@@ -73,7 +72,13 @@ public class Vehicle {
     }
 
     public Map<LocalDate, History> getHistoryMap() throws IOException {
-        return dataHandler.getJsonData().getHistoryMap();
+        TreeMap<LocalDate, History> result = new TreeMap<>(Collections.reverseOrder());
+        dataHandler.getJsonData().getHistoryMap()
+                .entrySet()
+                .stream()
+                .sorted(Comparator.comparing(Map.Entry::getKey, LocalDate::compareTo))
+                .forEachOrdered(set -> result.put(set.getKey(), set.getValue()));
+        return result;
     }
 
     @Override
