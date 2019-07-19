@@ -20,11 +20,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.kaiden</groupId>
-            <artifactId>vehicle</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>2.9.2</version>
@@ -43,7 +38,7 @@
     </dependencies>
 
     <properties>
-        <java.version>12</java.version>
+        <java.version>11</java.version>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <docker.image.prefix>glaesec</docker.image.prefix>
     </properties>
