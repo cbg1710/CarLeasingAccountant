@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 @CrossOrigin
 @RestController
@@ -56,7 +57,16 @@ public class Controller {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Success"),
             @ApiResponse(code = 500, message = "Vehicle does not exist or could not get file") })
     @RequestMapping(value = "/getHistory", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<History[]> getHistory(@RequestParam String vin) throws IOException {
-        return new ResponseEntity<>(Vehicle.getVehicle(vin).getHistories(), HttpStatus.OK);
+    public ResponseEntity<History[]> getHistory(@RequestParam String vin,
+            @RequestParam(name = "dataPoints", required = false) Integer dataPoints) throws IOException {
+
+        History[] histories = Vehicle.getVehicle(vin).getHistories();
+
+        if (dataPoints == null || dataPoints <= 0 || dataPoints >= histories.length) {
+            return new ResponseEntity<>(histories, HttpStatus.OK);
+        }
+
+        History[] result = Arrays.copyOfRange(histories, histories.length - dataPoints, histories.length + 1);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
