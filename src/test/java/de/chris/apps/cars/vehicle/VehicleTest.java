@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Map;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,8 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class VehicleTest {
 
     private static final String VIN = "TEST_VIN";
-    private static final LocalDate PICK_UP =
-            LocalDate.now().minusMonths(2);
+    private static final LocalDate PICK_UP = LocalDate.now().minusMonths(2);
     private static final LocalDate RELEASE = PICK_UP.plusYears(1);
     private static final int MAX_ODO = 365;
     private Vehicle vehicle;
@@ -39,7 +38,7 @@ class VehicleTest {
 
     @Test
     public void getRemainingDays() throws IOException {
-        assertEquals(ChronoUnit.DAYS.between(LocalDate.now(), RELEASE),vehicle.getRemainingDays());
+        assertEquals(ChronoUnit.DAYS.between(LocalDate.now(), RELEASE), vehicle.getRemainingDays());
     }
 
     @Test
@@ -52,16 +51,20 @@ class VehicleTest {
     @Test
     public void checkHistory() throws IOException {
         updateOdometer();
-        Map<LocalDate, History> map = Vehicle.getVehicle(VIN).getHistoryMap();
+        History[] histories = Vehicle.getVehicle(VIN).getHistories();
         History expectedHistory = new History(15, 20);
-        assertEquals(expectedHistory.getDistance(), map.get(LocalDate.now()).getDistance());
+        assertEquals(expectedHistory.getDistance(), getHistoryWithDate(histories, LocalDate.now()).getDistance());
+    }
+
+    private History getHistoryWithDate(History[] histories, LocalDate date) {
+        return Arrays.stream(histories).filter(h -> h.getDate().compareTo(date) == 0).findFirst().get();
     }
 
     @Test
     public void updateOdoMeterTwice() throws IOException {
         checkHistory();
         updateOdometer();
-        assertEquals(1, Vehicle.getVehicle(VIN).getHistoryMap().size());
+        assertEquals(1, Vehicle.getVehicle(VIN).getHistories().length);
     }
 
     @Test
@@ -83,8 +86,7 @@ class VehicleTest {
 
     @Test
     public void getAlreadyPassedDays() throws IOException {
-        assertTrue(vehicle.getPassedDays() >= 58
-                && vehicle.getPassedDays() <= 61);
+        assertTrue(vehicle.getPassedDays() >= 58 && vehicle.getPassedDays() <= 61);
     }
 
     @Test

@@ -1,13 +1,11 @@
 package de.chris.apps.cars.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.key.LocalDateKeyDeserializer;
 import com.google.common.base.Objects;
 
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class JsonData {
 
@@ -16,21 +14,20 @@ public class JsonData {
     @JsonProperty
     private Data data = null;
     @JsonProperty("history")
-    @JsonDeserialize(keyUsing = LocalDateKeyDeserializer.class)
-    private Map<LocalDate, History> historyMap = null;
+    private History[] histories = new History[0];
 
-    public JsonData() {}
+    public JsonData() {
+    }
 
     public JsonData(String vin, Data data) {
         this.vin = vin;
         this.data = data;
-        historyMap = new HashMap<>();
     }
 
-    public JsonData(String vin, Data data, Map<LocalDate, History> historyMap) {
+    public JsonData(String vin, Data data, History[] histories) {
         this.vin = vin;
         this.data = data;
-        this.historyMap = historyMap;
+        this.histories = histories;
     }
 
     public String getVin() {
@@ -45,12 +42,20 @@ public class JsonData {
         return data;
     }
 
-    public Map<LocalDate, History> getHistoryMap() {
-        return historyMap;
+    public History[] getHistories() {
+        return histories.clone();
     }
 
     public void addHistory(History history) {
-        historyMap.put(LocalDate.now(), history);
+        for (int i = 0; i < histories.length; i++) {
+            if (histories[i].getDate().compareTo(history.getDate()) == 0) {
+                histories[i] = history;
+                return;
+            }
+        }
+        List<History> newHistories = new ArrayList<>(Arrays.asList(histories));
+        newHistories.add(history);
+        histories = newHistories.toArray(new History[newHistories.size()]);
     }
 
     @Override
@@ -62,13 +67,12 @@ public class JsonData {
             return false;
         }
         JsonData jsonData = (JsonData) o;
-        return Objects.equal(vin, jsonData.vin) &&
-                Objects.equal(data, jsonData.data) &&
-                Objects.equal(historyMap, jsonData.historyMap);
+        return Objects.equal(vin, jsonData.vin) && Objects.equal(data, jsonData.data)
+                && Arrays.equals(histories, jsonData.histories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(vin, data, historyMap);
+        return Objects.hashCode(vin, data, histories);
     }
 }

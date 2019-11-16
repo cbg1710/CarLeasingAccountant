@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 public class Handler {
     private static final Logger LOG = LoggerFactory.getLogger(Handler.class);
@@ -117,11 +115,5 @@ public class Handler {
 
     private static File getDataFile(String vin) {
         return new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
-    }
-
-    private static float round(float value) {
-        BigDecimal result = new BigDecimal(Float.toString(value));
-        result = result.setScale(2, RoundingMode.HALF_UP);
-        return result.floatValue();
     }
 }

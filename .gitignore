@@ -22,6 +22,9 @@ target/
 *.iml
 *.iws
 
+#VSCode
+.vscode/
+
 #Vehicle JSON
 vehicles/
 

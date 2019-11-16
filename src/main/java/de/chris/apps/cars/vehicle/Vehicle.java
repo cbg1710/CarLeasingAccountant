@@ -1,17 +1,13 @@
 package de.chris.apps.cars.vehicle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
 public class Vehicle {
-    private static final Logger LOG = LoggerFactory.getLogger(Vehicle.class);
     private Handler dataHandler;
 
-    private Vehicle (Handler dataHandler) {
+    private Vehicle(Handler dataHandler) {
         this.dataHandler = dataHandler;
     }
 
@@ -71,14 +67,12 @@ public class Vehicle {
         return dataHandler.getJsonData().getVin();
     }
 
-    public Map<LocalDate, History> getHistoryMap() throws IOException {
-        TreeMap<LocalDate, History> result = new TreeMap<>(Collections.reverseOrder());
-        dataHandler.getJsonData().getHistoryMap()
-                .entrySet()
-                .stream()
-                .sorted(Comparator.comparing(Map.Entry::getKey, LocalDate::compareTo))
-                .forEachOrdered(set -> result.put(set.getKey(), set.getValue()));
-        return result;
+    public History[] getHistories() throws IOException {
+        List<History> result = new ArrayList<>();
+
+        History[] histories = dataHandler.getJsonData().getHistories();
+        Arrays.stream(histories).sorted((h1, h2) -> h1.getDate().compareTo(h2.getDate())).forEachOrdered(result::add);
+        return result.toArray(new History[result.size()]);
     }
 
     @Override
@@ -98,8 +92,8 @@ public class Vehicle {
         return Objects.hash(dataHandler);
     }
 
-    public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay,
-                                     int maxDistance) throws IOException {
+    public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay, int maxDistance)
+            throws IOException {
         return addVehicle(new JsonData(vin, new Data(pickUpDay, releaseDay, maxDistance)));
     }
 

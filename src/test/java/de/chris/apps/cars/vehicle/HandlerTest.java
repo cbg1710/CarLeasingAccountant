@@ -7,8 +7,6 @@ import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,15 +20,13 @@ class HandlerTest {
 
     private Handler dataHandler;
     private JsonData jsonData;
-    private History firstDay = new History(10, 20);
-    private History secondDay = new History(15, 40);
+    private History firstDay = new History(10, 20, PICK_UP);
+    private History secondDay = new History(15, 40, PICK_UP.plusDays(1));
 
     @BeforeAll
     public void setUp() throws IOException {
-        Map<LocalDate, History> map = new HashMap<>();
-        map.put(PICK_UP, firstDay);
-        map.put(PICK_UP.plusDays(1), secondDay);
-        jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), map);
+        History[] histories = new History[] { firstDay, secondDay };
+        jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), histories);
         dataHandler = Handler.addNewVehicle(jsonData);
     }
 
@@ -47,14 +43,12 @@ class HandlerTest {
 
     @Test
     public void getDataHandlerWhichDontExists() {
-        assertThrows(VehicleNotExisting.class,
-                () -> Handler.getDataHandler("NOT_THERE"));
+        assertThrows(VehicleNotExisting.class, () -> Handler.getDataHandler("NOT_THERE"));
     }
 
     @Test
     public void getDataHandlerAlreadyExists() {
-        assertThrows(VehicleAlreadyExists.class,
-                () -> Handler.addNewVehicle(jsonData));
+        assertThrows(VehicleAlreadyExists.class, () -> Handler.addNewVehicle(jsonData));
     }
 
     @AfterAll
