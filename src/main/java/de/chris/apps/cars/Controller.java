@@ -66,7 +66,7 @@ public class Controller {
             return new ResponseEntity<>(histories, HttpStatus.OK);
         }
 
-        History[] result = Arrays.copyOfRange(histories, histories.length - dataPoints, histories.length + 1);
+        History[] result = Arrays.copyOfRange(histories, histories.length - dataPoints, histories.length);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
