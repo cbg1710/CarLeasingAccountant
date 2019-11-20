@@ -11,8 +11,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
+
 public class Data {
 
+    @JsonProperty
+    private String name = "";
     @JsonProperty
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
@@ -26,9 +29,11 @@ public class Data {
     @JsonProperty
     private CurrentOdometer currentOdometer = new CurrentOdometer();
 
-    Data() {}
+    Data() {
+    }
 
-    Data(LocalDate pickUpDay, LocalDate returnDay, int maximumDistance) {
+    Data(String name, LocalDate pickUpDay, LocalDate returnDay, int maximumDistance) {
+        this.name = name;
         this.pickUpDay = pickUpDay;
         this.returnDay = returnDay;
         this.maximumDistance = maximumDistance;
@@ -79,6 +84,10 @@ public class Data {
         return round(getPassedDays() * getDistancePerDay());
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     private static float round(float value) {
         BigDecimal result = new BigDecimal(Float.toString(value));
         result = result.setScale(2, RoundingMode.HALF_UP);
@@ -94,10 +103,9 @@ public class Data {
             return false;
         }
         Data data = (Data) o;
-        return maximumDistance == data.maximumDistance &&
-                Objects.equals(pickUpDay, data.pickUpDay) &&
-                Objects.equals(returnDay, data.returnDay) &&
-                Objects.equals(currentOdometer, data.currentOdometer);
+        return maximumDistance == data.maximumDistance && Objects.equals(pickUpDay, data.pickUpDay)
+                && Objects.equals(returnDay, data.returnDay)
+                && Objects.equals(currentOdometer, data.currentOdometer);
     }
 
     @Override
@@ -113,7 +121,8 @@ public class Data {
         @JsonProperty
         int odometer = 0;
 
-        CurrentOdometer() {}
+        CurrentOdometer() {
+        }
 
         void updateOdometer(int odometer) {
             this.odometer = odometer;
@@ -133,8 +142,7 @@ public class Data {
                 return false;
             }
             CurrentOdometer that = (CurrentOdometer) o;
-            return odometer == that.odometer &&
-                    Objects.equals(odometerDay, that.odometerDay);
+            return odometer == that.odometer && Objects.equals(odometerDay, that.odometerDay);
         }
 
         @Override

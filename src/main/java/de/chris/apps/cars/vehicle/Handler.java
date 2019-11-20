@@ -11,7 +11,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -111,17 +112,22 @@ public class Handler {
         return new Handler(data);
     }
 
-    static String[] listVehicles() {
+    static Map<String, String> listVehicles() {
         try (Stream<Path> walk = Files.walk(Paths.get(DIRECTORY_PATH))) {
 
-            List<String> result = walk.map(x -> x.getFileName().toString())
-                    .filter(f -> f.endsWith(FILE_EXTENSION)).map(j -> j.split("\\.")[0])
-                    .collect(Collectors.toList());
-
-            return result.toArray(new String[result.size()]);
+            return walk.map(x -> x.getFileName().toString()).filter(f -> f.endsWith(FILE_EXTENSION))
+                    .map(j -> j.split("\\.")[0]).collect(Collectors.toMap(vin -> vin, vin -> {
+                        try {
+                            return Handler.getDataHandler(vin).getData().getName();
+                        }
+                        catch (IOException e) {
+                            LOG.warn("Could not get data of vehicle.", e);
+                            return "";
+                        }
+                    }));
         }
         catch (IOException e) {
-            return new String[0];
+            return new HashMap<>();
         }
     }
 

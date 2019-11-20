@@ -10,12 +10,14 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HandlerTest {
 
     private static final String VIN = "TEST_VIN";
+    private static final String NAME = "TEST_NAME";
     private static final LocalDate PICK_UP = LocalDate.of(2019, 3, 9);
     private static final LocalDate RELEASE = PICK_UP.plusYears(1);
     private static final int MAX_ODO = 13099;
@@ -28,7 +30,7 @@ class HandlerTest {
     @BeforeAll
     public void setUp() throws IOException {
         History[] histories = new History[] {firstDay, secondDay};
-        jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), histories);
+        jsonData = new JsonData(VIN, new Data(NAME, PICK_UP, RELEASE, MAX_ODO), histories);
         dataHandler = Handler.addNewVehicle(jsonData);
     }
 
@@ -55,17 +57,18 @@ class HandlerTest {
 
     @Test
     void getAllVehicles() throws IOException {
-        String[] vehicles = Handler.listVehicles();
-        assertEquals(1, vehicles.length);
-        assertEquals(VIN, vehicles[0]);
+        Map<String, String> vehicles = Handler.listVehicles();
+        assertEquals(1, vehicles.size());
+        assertEquals(NAME, vehicles.get(VIN));
 
         List<Handler> handler = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
-            handler.add(Handler.addNewVehicle(new JsonData("vin" + i,
-                    new Data(PICK_UP, RELEASE, MAX_ODO), new History[] {firstDay, secondDay})));
+            handler.add(Handler.addNewVehicle(
+                    new JsonData("vin" + i, new Data("name" + i, PICK_UP, RELEASE, MAX_ODO),
+                            new History[] {firstDay, secondDay})));
         }
         vehicles = Handler.listVehicles();
-        assertEquals(10, vehicles.length);
+        assertEquals(10, vehicles.size());
 
         handler.forEach(Handler::deleteDataFile);
         Arrays.stream(new File("vehicles").listFiles())

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -89,7 +90,8 @@ public class Controller {
                         code = 500, message = "Vehicle does not exist or could not get file")})
         @RequestMapping(value = "/listVehicles", method = RequestMethod.GET,
                         produces = "application/json")
-        public ResponseEntity<VehicleEntity[]> listVehicles() throws IOException {
-                return new ResponseEntity<VehicleEntity[]>(Vehicle.listVehicles(), HttpStatus.OK);
+        public ResponseEntity<List<VehicleEntity>> listVehicles() throws IOException {
+                return new ResponseEntity<List<VehicleEntity>>(Vehicle.listVehicles(),
+                                HttpStatus.OK);
         }
 }

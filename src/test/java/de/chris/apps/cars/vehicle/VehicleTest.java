@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class VehicleTest {
 
     private static final String VIN = "TEST_VIN";
+    private static final String NAME = "TEST_NAME";
     private static final LocalDate PICK_UP = LocalDate.now().minusMonths(2);
     private static final LocalDate RELEASE = PICK_UP.plusYears(1);
     private static final int MAX_ODO = 365;
@@ -22,7 +23,7 @@ class VehicleTest {
 
     @BeforeEach
     public void setUp() throws IOException {
-        vehicle = Vehicle.addVehicle(VIN, PICK_UP, RELEASE, MAX_ODO);
+        vehicle = Vehicle.addVehicle(VIN, NAME, PICK_UP, RELEASE, MAX_ODO);
     }
 
     @AfterEach
@@ -53,11 +54,13 @@ class VehicleTest {
         updateOdometer();
         History[] histories = Vehicle.getVehicle(VIN).getHistories();
         History expectedHistory = new History(15, 20);
-        assertEquals(expectedHistory.getDistance(), getHistoryWithDate(histories, LocalDate.now()).getDistance());
+        assertEquals(expectedHistory.getDistance(),
+                getHistoryWithDate(histories, LocalDate.now()).getDistance());
     }
 
     private History getHistoryWithDate(History[] histories, LocalDate date) {
-        return Arrays.stream(histories).filter(h -> h.getDate().compareTo(date) == 0).findFirst().get();
+        return Arrays.stream(histories).filter(h -> h.getDate().compareTo(date) == 0).findFirst()
+                .get();
     }
 
     @Test

@@ -3,9 +3,12 @@ package de.chris.apps.cars.vehicle;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import de.chris.apps.cars.entitiy.VehicleEntity;
 
 public class Vehicle {
+    private static Logger LOG = LoggerFactory.getLogger(Vehicle.class);
     private Handler dataHandler;
 
     private Vehicle(Handler dataHandler) {
@@ -94,9 +97,9 @@ public class Vehicle {
         return Objects.hash(dataHandler);
     }
 
-    public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay,
-            int maxDistance) throws IOException {
-        return addVehicle(new JsonData(vin, new Data(pickUpDay, releaseDay, maxDistance)));
+    public static Vehicle addVehicle(String vin, String name, LocalDate pickUpDay,
+            LocalDate releaseDay, int maxDistance) throws IOException {
+        return addVehicle(new JsonData(vin, new Data(name, pickUpDay, releaseDay, maxDistance)));
     }
 
     public static Vehicle addVehicle(JsonData data) throws IOException {
@@ -108,12 +111,13 @@ public class Vehicle {
         return new Vehicle(Handler.getDataHandler(vin));
     }
 
-    public static VehicleEntity[] listVehicles() {
-        String[] vehicles = Handler.listVehicles();
-        VehicleEntity[] result = new VehicleEntity[vehicles.length];
-        for (int i = 0; i < vehicles.length; i++) {
-            result[i] = new VehicleEntity(vehicles[i]);
-        }
+    public static List<VehicleEntity> listVehicles() {
+        Map<String, String> vehicles = Handler.listVehicles();
+        List<VehicleEntity> result = new ArrayList<>();
+
+        vehicles.forEach((vin, name) -> {
+            result.add(new VehicleEntity(vin, name));
+        });
         return result;
     }
 }
