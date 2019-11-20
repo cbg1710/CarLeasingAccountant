@@ -4,10 +4,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -25,7 +27,7 @@ class HandlerTest {
 
     @BeforeAll
     public void setUp() throws IOException {
-        History[] histories = new History[] { firstDay, secondDay };
+        History[] histories = new History[] {firstDay, secondDay};
         jsonData = new JsonData(VIN, new Data(PICK_UP, RELEASE, MAX_ODO), histories);
         dataHandler = Handler.addNewVehicle(jsonData);
     }
@@ -49,6 +51,25 @@ class HandlerTest {
     @Test
     public void getDataHandlerAlreadyExists() {
         assertThrows(VehicleAlreadyExists.class, () -> Handler.addNewVehicle(jsonData));
+    }
+
+    @Test
+    void getAllVehicles() throws IOException {
+        String[] vehicles = Handler.listVehicles();
+        assertEquals(1, vehicles.length);
+        assertEquals(VIN, vehicles[0]);
+
+        List<Handler> handler = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            handler.add(Handler.addNewVehicle(new JsonData("vin" + i,
+                    new Data(PICK_UP, RELEASE, MAX_ODO), new History[] {firstDay, secondDay})));
+        }
+        vehicles = Handler.listVehicles();
+        assertEquals(10, vehicles.length);
+
+        handler.forEach(Handler::deleteDataFile);
+        Arrays.stream(new File("vehicles").listFiles())
+                .forEach(f -> System.out.println(f.toString()));
     }
 
     @AfterAll

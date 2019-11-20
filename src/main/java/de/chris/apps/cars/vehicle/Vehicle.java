@@ -3,6 +3,7 @@ package de.chris.apps.cars.vehicle;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import de.chris.apps.cars.entitiy.VehicleEntity;
 
 public class Vehicle {
     private Handler dataHandler;
@@ -71,7 +72,8 @@ public class Vehicle {
         List<History> result = new ArrayList<>();
 
         History[] histories = dataHandler.getJsonData().getHistories();
-        Arrays.stream(histories).sorted((h1, h2) -> h1.getDate().compareTo(h2.getDate())).forEachOrdered(result::add);
+        Arrays.stream(histories).sorted((h1, h2) -> h1.getDate().compareTo(h2.getDate()))
+                .forEachOrdered(result::add);
         return result.toArray(new History[result.size()]);
     }
 
@@ -92,8 +94,8 @@ public class Vehicle {
         return Objects.hash(dataHandler);
     }
 
-    public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay, int maxDistance)
-            throws IOException {
+    public static Vehicle addVehicle(String vin, LocalDate pickUpDay, LocalDate releaseDay,
+            int maxDistance) throws IOException {
         return addVehicle(new JsonData(vin, new Data(pickUpDay, releaseDay, maxDistance)));
     }
 
@@ -104,5 +106,14 @@ public class Vehicle {
 
     public static Vehicle getVehicle(String vin) {
         return new Vehicle(Handler.getDataHandler(vin));
+    }
+
+    public static VehicleEntity[] listVehicles() {
+        String[] vehicles = Handler.listVehicles();
+        VehicleEntity[] result = new VehicleEntity[vehicles.length];
+        for (int i = 0; i < vehicles.length; i++) {
+            result[i] = new VehicleEntity(vehicles[i]);
+        }
+        return result;
     }
 }

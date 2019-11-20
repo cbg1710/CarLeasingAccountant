@@ -8,6 +8,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Handler {
     private static final Logger LOG = LoggerFactory.getLogger(Handler.class);
@@ -103,6 +109,20 @@ public class Handler {
             throw new VehicleAlreadyExists(data.getVin());
         }
         return new Handler(data);
+    }
+
+    static String[] listVehicles() {
+        try (Stream<Path> walk = Files.walk(Paths.get(DIRECTORY_PATH))) {
+
+            List<String> result = walk.map(x -> x.getFileName().toString())
+                    .filter(f -> f.endsWith(FILE_EXTENSION)).map(j -> j.split("\\.")[0])
+                    .collect(Collectors.toList());
+
+            return result.toArray(new String[result.size()]);
+        }
+        catch (IOException e) {
+            return new String[0];
+        }
     }
 
     static Handler getDataHandler(String vin) {
