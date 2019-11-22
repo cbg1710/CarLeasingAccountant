@@ -11,8 +11,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributeView;
+import java.nio.file.attribute.FileTime;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -114,20 +119,29 @@ public class Handler {
 
     static Map<String, String> listVehicles() {
         try (Stream<Path> walk = Files.walk(Paths.get(DIRECTORY_PATH))) {
+            List<String> jsonFiles = walk
+                    .sorted((e1, e2) -> getFileTime(e1).compareTo(getFileTime(e2)))
+                    .map(x -> x.getFileName().toString()).filter(f -> f.endsWith(FILE_EXTENSION))
+                    .map(s -> s.split("\\.")[0]).collect(Collectors.toList());
 
-            return walk.map(x -> x.getFileName().toString()).filter(f -> f.endsWith(FILE_EXTENSION))
-                    .map(j -> j.split("\\.")[0]).collect(Collectors.toMap(vin -> vin, vin -> {
-                        try {
-                            return Handler.getDataHandler(vin).getData().getName();
-                        }
-                        catch (IOException e) {
-                            LOG.warn("Could not get data of vehicle.", e);
-                            return "";
-                        }
-                    }));
+            Map<String, String> result = new LinkedHashMap<>();
+            for (String s : jsonFiles) {
+                result.put(s, Handler.getDataHandler(s).getData().getName());
+            }
+            return result;
         }
         catch (IOException e) {
             return new HashMap<>();
+        }
+    }
+
+    private static FileTime getFileTime(Path p) {
+        try {
+            return Files.getFileAttributeView(p, BasicFileAttributeView.class).readAttributes()
+                    .creationTime();
+        }
+        catch (IOException e) {
+            return FileTime.from(0, TimeUnit.NANOSECONDS);
         }
     }
 

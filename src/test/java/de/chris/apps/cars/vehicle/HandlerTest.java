@@ -69,10 +69,9 @@ class HandlerTest {
         }
         vehicles = Handler.listVehicles();
         assertEquals(10, vehicles.size());
-
-        handler.forEach(Handler::deleteDataFile);
         Arrays.stream(new File("vehicles").listFiles())
                 .forEach(f -> System.out.println(f.toString()));
+        handler.forEach(Handler::deleteDataFile);
     }
 
     @AfterAll
