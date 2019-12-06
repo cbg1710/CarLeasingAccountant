@@ -1,5 +1,6 @@
 package de.chris.apps.cars;
 
+import de.chris.apps.cars.entitiy.NewVehicle;
 import de.chris.apps.cars.entitiy.Overview;
 import de.chris.apps.cars.entitiy.VehicleEntity;
 import de.chris.apps.cars.vehicle.History;
@@ -25,7 +26,7 @@ public class Controller {
                         @ApiResponse(code = 500,
                                         message = "Vehicle file not found or vehicle is already existing")})
         @RequestMapping(value = "/newVehicle", method = RequestMethod.POST)
-        public ResponseEntity<Void> addVehicle(@RequestBody JsonData data) throws IOException {
+        public ResponseEntity<Void> addVehicle(@RequestBody NewVehicle data) throws IOException {
                 Vehicle.addVehicle(data);
                 return new ResponseEntity<>(HttpStatus.OK);
         }

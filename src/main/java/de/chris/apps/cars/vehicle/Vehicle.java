@@ -3,6 +3,7 @@ package de.chris.apps.cars.vehicle;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import de.chris.apps.cars.entitiy.NewVehicle;
 import de.chris.apps.cars.entitiy.VehicleEntity;
 
 public class Vehicle {
@@ -92,6 +93,11 @@ public class Vehicle {
     @Override
     public int hashCode() {
         return Objects.hash(dataHandler);
+    }
+
+    public static Vehicle addVehicle(NewVehicle vehicle) throws IOException {
+        return addVehicle(new JsonData(vehicle.getVin(), new Data(vehicle.getName(),
+                vehicle.getPickUpDay(), vehicle.getReturnDay(), vehicle.getMaximumDistance())));
     }
 
     public static Vehicle addVehicle(String vin, String name, LocalDate pickUpDay,
