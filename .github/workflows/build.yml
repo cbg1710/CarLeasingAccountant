@@ -24,8 +24,20 @@ jobs:
       run: mvn -B package --file pom.xml
       working-directory: ./server
       
+    - name: Archive Server
+      uses: actions/upload-artifact@v1
+      with:
+        name: target
+        path: server/target
+      
     - name: Build UI
       run: |
           npm ci
           npm run build:prod 
       working-directory: ./ui
+      
+    - name: Archive UI
+      uses: actions/upload-artifact@v1
+      with:
+        name: dist
+        path: ui/dist
