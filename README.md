@@ -2,8 +2,11 @@
 CarLeasingAccountant gives you an overview above some interesting figures for car leasing.
 It was mainly developed to get information about the already passed distance and how many kilometres are left.
 
-The controlling of the system is happening via HTTP requests.
+## Server
 
+All the server sources are located in the "server" folder. 
+
+The controlling of the system is happening via HTTP requests.
 Open the file /doc/swagger-api-doc.yaml in http://editor.swagger.io to see the full documentation of the rest
 endpoints.
 
@@ -23,6 +26,10 @@ script and after that the run.sh script. The run script will ask you for a direc
 to save the vehicle information on your host.
 
 You can also use existing docker images at the [docker hub](https://cloud.docker.com/repository/docker/glaesec/leasing-accountant/general). 
+
+## UI
+
+There is also a web site. Go to the folder "ui" for further information.
 
 
 ## License
