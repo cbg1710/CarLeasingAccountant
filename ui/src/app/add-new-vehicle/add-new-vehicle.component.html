@@ -1,0 +1,21 @@
+<div class="component">
+  <div class="ui-g-12">
+    <span>VIN <input type="text" pInputText [(ngModel)]="vin" /></span>
+  </div>
+  <div class="ui-g-12">
+    <span>Name <input type="text" pInputText [(ngModel)]="name" /></span>
+  </div>
+  <div class="ui-g-12">
+    <span>Pick up date <p-calendar [(ngModel)]="pickUpDate"></p-calendar></span>
+  </div>
+  <div class="ui-g-12">
+    <span>Return date <p-calendar [(ngModel)]="returnDate"></p-calendar></span>
+  </div>
+  <div class="ui-g-12">
+    <span>Maxium distance <input type="number" pInputText [(ngModel)]="maxDistance" /></span>
+  </div>
+
+  <div class="ui-g-12">
+    <p-button label="Save" (onClick)="addVehicle()"></p-button>
+  </div>
+</div>
