@@ -10,9 +10,9 @@ type Vehicle struct {
 
 // VehicleOverview Complete overview of a vehicle
 type VehicleOverview struct {
-	Vin     string         `json:"vin"`
-	Data    VehicleData    `json:"data"`
-	History VehicleHistory `json:"history"`
+	Vin     string           `json:"vin"`
+	Data    VehicleData      `json:"data"`
+	History []VehicleHistory `json:"history"`
 }
 
 // VehicleData containig specific vehicle data such as maximum allowd distance
