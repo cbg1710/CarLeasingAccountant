@@ -36,7 +36,6 @@ func getOverviewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	util.GetVehicles()
 	http.HandleFunc("/", handler)
 	http.HandleFunc("/listVehicles", listVehiclesHandler)
 	http.HandleFunc("/getOverview", getOverviewHandler)

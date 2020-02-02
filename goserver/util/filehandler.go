@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 
@@ -33,7 +34,6 @@ func visit(files *[]string) filepath.WalkFunc {
 func listVehicleFiles() []string {
 	var files []string
 	filepath.Walk(dirPath, visit(&files))
-	fmt.Println(files)
 	return files
 }
 
@@ -48,15 +48,20 @@ func getVehicle(vin string) string {
 
 // GetVehicleOverview returns a vehicle overview for the given vin
 func GetVehicleOverview(vin string) entitiy.VehicleOverview {
+	fmt.Println("Overview...")
 	vehicle := getVehicle(vin)
 	var result entitiy.VehicleOverview
 	fVal, _ := ioutil.ReadFile(vehicle)
-	json.Unmarshal(fVal, &result)
+	err := json.Unmarshal(fVal, &result)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return result
 }
 
 // GetVehicles returns a list of all vehicles.
 func GetVehicles() []entitiy.Vehicle {
+	fmt.Println("get vehicles")
 	var result []entitiy.Vehicle
 	vehicleFiles := listVehicleFiles()
 	for _, file := range vehicleFiles {
@@ -71,6 +76,5 @@ func GetVehicles() []entitiy.Vehicle {
 		result = append(result, vehicle)
 	}
 
-	fmt.Println(result)
 	return result
 }
