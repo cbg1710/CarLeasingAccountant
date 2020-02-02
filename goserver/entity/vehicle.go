@@ -7,14 +7,39 @@ import (
 	"time"
 )
 
+//Strucutres of the endpoint entitys
+
 //Vehicle type
 type Vehicle struct {
 	Vin  string `json:"vehicle"`
 	Name string `json:"name"`
 }
 
-// VehicleOverview Complete overview of a vehicle
+// VehicleOverview meta information of a vehicle
 type VehicleOverview struct {
+	AllowedDistancePerDay float32         `json:"allowedDistancePerDay"`
+	AverageDistancePerDay float32         `json:"averageDistancePerDay"`
+	CurrentOdometer       CurrentOdometer `json:"currentOdometer"`
+	DistanceDifference    float32         `json:"distanceDifference"`
+	MaximumDistance       int32           `json:"maximumDistance"`
+	RemainingDays         int32           `json:"remainingDays"`
+	RemainingDistance     int32           `json:"remainingDistance"`
+	ReturnDay             Date            `json:"returnDay"`
+}
+
+// NewVehicle struct for adding a new vehicle
+type NewVehicle struct {
+	MaximumDistance int32  `json:"maximumDistance"`
+	Vin             string `json:"vin"`
+	Name            string `json:"name"`
+	PickUpDay       Date   `json:"pickUpDay"`
+	ReturnDay       Date   `json:"returnDay"`
+}
+
+// Structures of the JSON File...
+
+// VehicleJSONFile Complete overview of a vehicle
+type VehicleJSONFile struct {
 	Vin     string           `json:"vin"`
 	Data    VehicleData      `json:"data"`
 	History []VehicleHistory `json:"history"`

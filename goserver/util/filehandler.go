@@ -46,11 +46,10 @@ func getVehicle(vin string) string {
 	return ""
 }
 
-// GetVehicleOverview returns a vehicle overview for the given vin
-func GetVehicleOverview(vin string) entitiy.VehicleOverview {
-	fmt.Println("Overview...")
+// GetVehicle returns all information about the given vehicle
+func GetVehicle(vin string) entitiy.VehicleJSONFile {
 	vehicle := getVehicle(vin)
-	var result entitiy.VehicleOverview
+	var result entitiy.VehicleJSONFile
 	fVal, _ := ioutil.ReadFile(vehicle)
 	err := json.Unmarshal(fVal, &result)
 	if err != nil {
@@ -67,12 +66,12 @@ func GetVehicles() []entitiy.Vehicle {
 	for _, file := range vehicleFiles {
 		fVal, _ := ioutil.ReadFile(file)
 
-		var vehicleOverview entitiy.VehicleOverview
-		json.Unmarshal(fVal, &vehicleOverview)
+		var vehicleFile entitiy.VehicleJSONFile
+		json.Unmarshal(fVal, &vehicleFile)
 
 		var vehicle entitiy.Vehicle
-		vehicle.Name = vehicleOverview.Data.Name
-		vehicle.Vin = vehicleOverview.Vin
+		vehicle.Name = vehicleFile.Data.Name
+		vehicle.Vin = vehicleFile.Vin
 		result = append(result, vehicle)
 	}
 

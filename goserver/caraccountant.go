@@ -30,7 +30,7 @@ func getOverviewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vin := key[0]
-	overview := util.GetVehicleOverview(vin)
+	overview := util.GetOverview(vin)
 	json, _ := json.Marshal(overview)
 	w.Write(json)
 }
