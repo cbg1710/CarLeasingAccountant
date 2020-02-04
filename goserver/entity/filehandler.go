@@ -1,4 +1,4 @@
-package util
+package entity
 
 import (
 	"encoding/json"
@@ -9,8 +9,6 @@ import (
 	"path/filepath"
 
 	"strings"
-
-	entitiy "github.com/cbg1710/CarAccountant/entity"
 )
 
 const fileExtension = ".JSON"
@@ -47,9 +45,9 @@ func getVehicle(vin string) string {
 }
 
 // GetVehicle returns all information about the given vehicle
-func GetVehicle(vin string) entitiy.VehicleJSONFile {
+func GetVehicle(vin string) VehicleJSONFile {
 	vehicle := getVehicle(vin)
-	var result entitiy.VehicleJSONFile
+	var result VehicleJSONFile
 	fVal, _ := ioutil.ReadFile(vehicle)
 	err := json.Unmarshal(fVal, &result)
 	if err != nil {
@@ -59,21 +57,19 @@ func GetVehicle(vin string) entitiy.VehicleJSONFile {
 }
 
 // GetVehicles returns a list of all vehicles.
-func GetVehicles() []entitiy.Vehicle {
-	fmt.Println("get vehicles")
-	var result []entitiy.Vehicle
+func GetVehicles() []Vehicle {
+	var result []Vehicle
 	vehicleFiles := listVehicleFiles()
 	for _, file := range vehicleFiles {
 		fVal, _ := ioutil.ReadFile(file)
 
-		var vehicleFile entitiy.VehicleJSONFile
+		var vehicleFile VehicleJSONFile
 		json.Unmarshal(fVal, &vehicleFile)
 
-		var vehicle entitiy.Vehicle
+		var vehicle Vehicle
 		vehicle.Name = vehicleFile.Data.Name
 		vehicle.Vin = vehicleFile.Vin
 		result = append(result, vehicle)
 	}
-
 	return result
 }

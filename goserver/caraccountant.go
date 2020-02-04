@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	util "github.com/cbg1710/CarAccountant/util"
+	entity "github.com/cbg1710/CarAccountant/entity"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +14,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func listVehiclesHandler(w http.ResponseWriter, r *http.Request) {
-	vehicles := util.GetVehicles()
+	vehicles := entity.GetVehicles()
 	json, _ := json.Marshal(vehicles)
 	w.Write(json)
 }
@@ -30,8 +30,11 @@ func getOverviewHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	vin := key[0]
-	overview := util.GetOverview(vin)
-	json, _ := json.Marshal(overview)
+	overViewBuilder := entity.VehicleOverviewBuilder{
+		VIN:      vin,
+		JSONFile: entity.GetVehicle(vin),
+	}
+	json, _ := json.Marshal(overViewBuilder.GetOverview())
 	w.Write(json)
 }
 
