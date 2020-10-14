@@ -11,7 +11,7 @@ import { DistanceChartComponent } from './distance-chart/distance-chart.componen
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { InputTextModule } from 'primeng/components/inputtext/inputtext';
+import { InputTextModule } from 'primeng/inputtext';
 import { ChartModule } from 'primeng/chart'
 import { MenuModule } from 'primeng/menu';
 import { MenuTabComponent } from './menu-tab/menu-tab.component';

@@ -10,8 +10,8 @@ import { DistanceChartComponent } from '../distance-chart/distance-chart.compone
 })
 export class VehicleComponent implements OnInit {
   vin: string = '';
-  @ViewChild(DistanceChartComponent, { static: false }) private chart: DistanceChartComponent;
-  @ViewChild(OverviewComponent, { static: false }) private overview: OverviewComponent;
+  @ViewChild(DistanceChartComponent) private chart: DistanceChartComponent;
+  @ViewChild(OverviewComponent) private overview: OverviewComponent;
 
   constructor(route: ActivatedRoute) {
     route.paramMap.subscribe(paramMap => this.vin = paramMap.get('vin'));
