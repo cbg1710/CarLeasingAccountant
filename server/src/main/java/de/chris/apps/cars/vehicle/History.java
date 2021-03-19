@@ -1,13 +1,13 @@
 package de.chris.apps.cars.vehicle;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.google.common.base.Objects;
 
 public class History {
 
@@ -30,7 +30,7 @@ public class History {
     }
 
     public History(int distance, float allowedDistance, LocalDate date) {
-        this.date = LocalDate.now();
+        this.date = date;
         this.distance = distance;
         this.allowedDistance = allowedDistance;
     }
@@ -60,13 +60,13 @@ public class History {
     }
 
     @Override
-    public String toString() {
-        return "[History:" + " date= " + date.toString() + " allowedDistance=" + allowedDistance + " distance="
-                + distance + "]";
+    public int hashCode() {
+        return Objects.hash(distance, allowedDistance);
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(distance, allowedDistance);
+    public String toString() {
+        return "[History:" + " date= " + date.toString() + " allowedDistance=" + allowedDistance + " distance="
+                + distance + "]";
     }
 }

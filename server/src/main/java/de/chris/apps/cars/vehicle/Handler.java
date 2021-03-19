@@ -1,7 +1,6 @@
 package de.chris.apps.cars.vehicle;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +16,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,10 +47,12 @@ public class Handler {
     }
 
     private File createDataFile(JsonData jsonData) throws IOException {
-        File result = new File(DIRECTORY_PATH + "/" + jsonData.getVin() + FILE_EXTENSION);
+        File result = new File(DIRECTORY_PATH + File.separator + jsonData.getVin() + FILE_EXTENSION);
         if (!result.exists()) {
             LOG.info("Create new vehicle data file {}", result.getName());
-            result.createNewFile();
+            if (!result.createNewFile()) {
+                throw new CouldNotCreateVehicle(jsonData.getVin());
+            }
         }
         return result;
     }
@@ -67,7 +69,11 @@ public class Handler {
 
     void deleteDataFile() {
         LOG.warn("Delete data file {}", jsonDataFile.getName());
-        jsonDataFile.delete();
+        try {
+            Files.delete(jsonDataFile.toPath());
+        } catch (IOException e) {
+            LOG.error("Could not delete file " + jsonDataFile.getName(), e);
+        }
     }
 
     JsonData getJsonData() throws IOException {
@@ -102,12 +108,12 @@ public class Handler {
             return false;
         }
         Handler handler = (Handler) o;
-        return Objects.equal(jsonDataFile, handler.jsonDataFile);
+        return jsonDataFile.equals(handler.jsonDataFile);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(jsonDataFile);
+        return Objects.hash(jsonDataFile);
     }
 
     static Handler addNewVehicle(JsonData data) throws IOException {
@@ -154,6 +160,6 @@ public class Handler {
     }
 
     private static File getDataFile(String vin) {
-        return new File(DIRECTORY_PATH + "/" + vin + FILE_EXTENSION);
+        return new File(DIRECTORY_PATH + File.separator + vin + FILE_EXTENSION);
     }
 }

@@ -1,11 +1,11 @@
 package de.chris.apps.cars.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.common.base.Objects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class JsonData {
 
@@ -67,12 +67,17 @@ public class JsonData {
             return false;
         }
         JsonData jsonData = (JsonData) o;
-        return Objects.equal(vin, jsonData.vin) && Objects.equal(data, jsonData.data)
-                && Arrays.equals(histories, jsonData.histories);
+        if (!vin.equals(jsonData.vin)) {
+            return false;
+        }
+        if (!data.equals(jsonData.data)) {
+            return false;
+        }
+        return Arrays.equals(histories, jsonData.histories);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(vin, data, histories);
+        return Objects.hash(vin, data);
     }
 }
