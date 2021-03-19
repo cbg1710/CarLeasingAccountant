@@ -1,4 +1,4 @@
-FROM bellsoft/liberica-openjdk-debian:12.0.1
+FROM amazoncorretto:11.0.10-alpine
 VOLUME /tmp
 ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /app/lib
