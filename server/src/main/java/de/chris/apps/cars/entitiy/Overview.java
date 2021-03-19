@@ -15,6 +15,10 @@ public class Overview {
     @JsonProperty
     @JsonSerialize(using = LocalDateSerializer.class)
     @JsonDeserialize(using = LocalDateDeserializer.class)
+    private LocalDate pickUpDay = null;
+    @JsonProperty
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate returnDay = null;
     @JsonProperty
     private long remainingDays = 0;
@@ -34,6 +38,7 @@ public class Overview {
     public Overview() {}
 
     public Overview(Vehicle vehicle) throws IOException {
+        pickUpDay = vehicle.getPickupDate();
         returnDay = vehicle.getReturnDate();
         remainingDays = vehicle.getRemainingDays();
         maximumDistance = vehicle.getMaximumDistance();
