@@ -76,12 +76,22 @@ public class Data {
         return round(currentOdometer.odometer / (float) getPassedDays());
     }
 
-    float getDistanceDiff() {
-        return round(getAllowedDistance() - currentOdometer.getOdometer());
+    int getDistanceDiff() {
+        var diff = getAllowedDistance() - currentOdometer.getOdometer();
+        BigDecimal result = new BigDecimal(Float.toString(diff));
+        result = result.setScale(0, RoundingMode.HALF_UP);
+        return result.intValue();
     }
 
     float getAllowedDistance() {
         return round(getPassedDays() * getDistancePerDay());
+    }
+
+    public int calculateHolidayTrip() {
+        var expectedDistanceAtReturnDay = getRemainingDays() * getAverageDistancePerDay() + currentOdometer.odometer;
+        BigDecimal rounded = new BigDecimal(Float.toString(expectedDistanceAtReturnDay));
+        rounded = rounded.setScale(0, RoundingMode.HALF_UP);
+        return getMaximumDistance() - rounded.intValue();
     }
 
     public String getName() {

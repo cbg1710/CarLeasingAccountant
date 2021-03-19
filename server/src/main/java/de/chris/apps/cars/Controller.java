@@ -48,8 +48,20 @@ public class Controller {
                         @ApiResponse(code = 500,
                                         message = "Vehicle does not exist or could not get file")})
         @GetMapping(value = "/getDistanceDiff", produces = "application/json")
-        public ResponseEntity<Float> getDistanceDiff(@RequestParam String vin) throws IOException {
+        public ResponseEntity<Integer> getDistanceDiff(@RequestParam String vin) throws IOException {
                 return new ResponseEntity<>(Vehicle.getVehicle(vin).getDistanceDifference(),
+                                HttpStatus.OK);
+        }
+
+        @ApiOperation(value = "Calculates how much kilometers are left for a long road trip. " 
+                + "If the value is negative no such trip should be made.")
+        @ApiResponses(value = {
+                        @ApiResponse(code = 200, message = "Success", response = Float.class),
+                        @ApiResponse(code = 500,
+                                        message = "Vehicle does not exist or could not get file")})
+        @GetMapping(value = "/holiday", produces = "application/json")
+        public ResponseEntity<Integer> holiday(@RequestParam String vin) throws IOException {
+                return new ResponseEntity<>(Vehicle.getVehicle(vin).holiday(),
                                 HttpStatus.OK);
         }
 

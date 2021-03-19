@@ -22,35 +22,35 @@ class VehicleTest {
     private Vehicle vehicle;
 
     @BeforeEach
-    public void setUp() throws IOException {
+    void setUp() throws IOException {
         vehicle = Vehicle.addVehicle(VIN, NAME, PICK_UP, RELEASE, MAX_ODO);
     }
 
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         vehicle.getDataHandler().deleteDataFile();
     }
 
     @Test
-    public void getExitingVehicle() {
+    void getExitingVehicle() {
         Vehicle actual = Vehicle.getVehicle(VIN);
         assertEquals(vehicle, actual);
     }
 
     @Test
-    public void getRemainingDays() throws IOException {
+    void getRemainingDays() throws IOException {
         assertEquals(ChronoUnit.DAYS.between(LocalDate.now(), RELEASE), vehicle.getRemainingDays());
     }
 
     @Test
-    public void updateOdometer() throws IOException {
+    void updateOdometer() throws IOException {
         vehicle.updateOdometer(15);
         assertEquals(15, Vehicle.getVehicle(VIN).getOdometer());
 
     }
 
     @Test
-    public void checkHistory() throws IOException {
+    void checkHistory() throws IOException {
         updateOdometer();
         History[] histories = Vehicle.getVehicle(VIN).getHistories();
         History expectedHistory = new History(15, 20);
@@ -64,36 +64,36 @@ class VehicleTest {
     }
 
     @Test
-    public void updateOdoMeterTwice() throws IOException {
+    void updateOdoMeterTwice() throws IOException {
         checkHistory();
         updateOdometer();
         assertEquals(1, Vehicle.getVehicle(VIN).getHistories().length);
     }
 
     @Test
-    public void getRemainingDistance() throws IOException {
+    void getRemainingDistance() throws IOException {
         updateOdometer();
         assertEquals(MAX_ODO - 15, vehicle.getRemainingDistance());
     }
 
     @Test
-    public void getDistancePerDay() throws IOException {
+    void getDistancePerDay() throws IOException {
         assertEquals(1, Math.round(vehicle.getDistancePerDay()));
     }
 
     @Test
-    public void getAverageDistancePerDay() throws IOException {
+    void getAverageDistancePerDay() throws IOException {
         vehicle.updateOdometer(61);
         assertEquals(1, Math.round(vehicle.getAverageDistancePerDay()));
     }
 
     @Test
-    public void getAlreadyPassedDays() throws IOException {
+    void getAlreadyPassedDays() throws IOException {
         assertTrue(vehicle.getPassedDays() >= 58 && vehicle.getPassedDays() <= 61);
     }
 
     @Test
-    public void startUpDataEquals() throws IOException {
+    void startUpDataEquals() throws IOException {
         assertEquals(VIN, vehicle.getVin());
         assertEquals(PICK_UP, vehicle.getPickupDate());
         assertEquals(RELEASE, vehicle.getReturnDate());

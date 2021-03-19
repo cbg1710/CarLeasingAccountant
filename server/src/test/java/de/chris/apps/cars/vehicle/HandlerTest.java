@@ -28,30 +28,30 @@ class HandlerTest {
     private History secondDay = new History(15, 40, PICK_UP.plusDays(1));
 
     @BeforeAll
-    public void setUp() throws IOException {
+    void setUp() throws IOException {
         History[] histories = new History[] {firstDay, secondDay};
         jsonData = new JsonData(VIN, new Data(NAME, PICK_UP, RELEASE, MAX_ODO), histories);
         dataHandler = Handler.addNewVehicle(jsonData);
     }
 
     @Test
-    public void dataExists() {
+    void dataExists() {
         assertTrue(dataHandler.getDataFile().exists());
     }
 
     @Test
-    public void getDataFromFile() throws IOException {
+    void getDataFromFile() throws IOException {
         JsonData actual = dataHandler.getJsonData();
         assertEquals(jsonData, actual);
     }
 
     @Test
-    public void getDataHandlerWhichDontExists() {
+    void getDataHandlerWhichDontExists() {
         assertThrows(VehicleNotExisting.class, () -> Handler.getDataHandler("NOT_THERE"));
     }
 
     @Test
-    public void getDataHandlerAlreadyExists() {
+    void getDataHandlerAlreadyExists() {
         assertThrows(VehicleAlreadyExists.class, () -> Handler.addNewVehicle(jsonData));
     }
 
@@ -75,7 +75,7 @@ class HandlerTest {
     }
 
     @AfterAll
-    public void cleanUp() {
+    void cleanUp() {
         dataHandler.deleteDataFile();
     }
 

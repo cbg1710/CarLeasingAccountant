@@ -37,7 +37,7 @@ public class Vehicle {
         return dataHandler.getData().getRemainingDistance();
     }
 
-    public float getDistanceDifference() throws IOException {
+    public int getDistanceDifference() throws IOException {
         return dataHandler.getData().getDistanceDiff();
     }
 
@@ -59,6 +59,10 @@ public class Vehicle {
 
     public LocalDate getPickupDate() throws IOException {
         return dataHandler.getData().getPickUpDay();
+    }
+
+    public int holiday() throws IOException {
+        return dataHandler.getData().calculateHolidayTrip();
     }
 
     public LocalDate getReturnDate() throws IOException {
@@ -118,9 +122,8 @@ public class Vehicle {
         Map<String, String> vehicles = Handler.listVehicles();
         List<VehicleEntity> result = new ArrayList<>();
 
-        vehicles.forEach((vin, name) -> {
-            result.add(new VehicleEntity(vin, name));
-        });
+        vehicles.forEach((vin, name) -> result.add(new VehicleEntity(vin, name)));
+        
         return result;
     }
 }
