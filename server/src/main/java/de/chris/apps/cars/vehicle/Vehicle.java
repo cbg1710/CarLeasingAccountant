@@ -82,6 +82,34 @@ public class Vehicle {
         return result.toArray(new History[result.size()]);
     }
 
+    public Trend calculateTrend() throws IOException {
+        var meassurePoints = getHistories();
+        if (meassurePoints.length < 2) {
+            return Trend.NO_TREND;
+        }
+
+        var lastDay = meassurePoints[meassurePoints.length -1];
+        var lastAverage = Data.getAverageDistancePerDay(lastDay.distance, lastDay.getDate(), getPickupDate());
+
+        var daysToCalc = meassurePoints.length < 7 ? meassurePoints.length :  7;
+        var averages = 0.0;
+        for (int i = meassurePoints.length -2; i >= meassurePoints.length - daysToCalc; i--) {
+            var day = meassurePoints[i];
+            var avg = Data.getAverageDistancePerDay(day.distance, day.getDate(), getPickupDate());
+            
+            averages += avg;
+        }
+
+        var pastAverage = averages / (float) (daysToCalc - 1);
+        if (lastAverage > pastAverage) {
+            return Trend.RISING;
+        }
+        else if (lastAverage < pastAverage) {
+            return Trend.FALLING;
+        }
+        return Trend.STABLE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

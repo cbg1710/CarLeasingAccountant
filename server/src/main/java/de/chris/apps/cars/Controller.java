@@ -4,6 +4,7 @@ import de.chris.apps.cars.entitiy.NewVehicle;
 import de.chris.apps.cars.entitiy.Overview;
 import de.chris.apps.cars.entitiy.VehicleEntity;
 import de.chris.apps.cars.vehicle.History;
+import de.chris.apps.cars.vehicle.Trend;
 import de.chris.apps.cars.vehicle.Vehicle;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -56,12 +57,24 @@ public class Controller {
         @ApiOperation(value = "Calculates how much kilometers are left for a long road trip. " 
                 + "If the value is negative no such trip should be made.")
         @ApiResponses(value = {
-                        @ApiResponse(code = 200, message = "Success", response = Float.class),
+                        @ApiResponse(code = 200, message = "Success", response = Integer.class),
                         @ApiResponse(code = 500,
                                         message = "Vehicle does not exist or could not get file")})
         @GetMapping(value = "/holiday", produces = "application/json")
         public ResponseEntity<Integer> holiday(@RequestParam String vin) throws IOException {
                 return new ResponseEntity<>(Vehicle.getVehicle(vin).holiday(),
+                                HttpStatus.OK);
+        }
+
+        @ApiOperation(value = "Average kilometer per day trend. RISING if driven kilometer at the last day was higher than the days bevore. It the " 
+                + "kolimeters are less the result is FALLING. If the kilometers are the same the response is STABLE. If no historsy data is present the result is NO TREND")
+        @ApiResponses(value = {
+                        @ApiResponse(code = 200, message = "Success", response = Trend.class),
+                        @ApiResponse(code = 500,
+                                        message = "Vehicle does not exist or could not get file")})
+        @GetMapping(value = "/trend", produces = "application/json")
+        public ResponseEntity<Trend> trend(@RequestParam String vin) throws IOException {
+                return new ResponseEntity<>(Vehicle.getVehicle(vin).calculateTrend(),
                                 HttpStatus.OK);
         }
 

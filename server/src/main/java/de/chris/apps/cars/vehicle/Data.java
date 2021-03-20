@@ -76,6 +76,15 @@ public class Data {
         return round(currentOdometer.odometer / (float) getPassedDays());
     }
 
+    static float getAverageDistancePerDay(int odo, LocalDate latestDate, LocalDate fromDate) {
+        var passedDays = getPassedDays(latestDate, fromDate);
+        return round(odo / (float) passedDays);
+    }
+
+    static long getPassedDays(LocalDate to, LocalDate from) {
+        return ChronoUnit.DAYS.between(from, to);
+    }
+
     int getDistanceDiff() {
         var diff = getAllowedDistance() - currentOdometer.getOdometer();
         BigDecimal result = new BigDecimal(Float.toString(diff));
