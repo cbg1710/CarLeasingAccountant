@@ -39,8 +39,12 @@ public class Vehicle {
     }
 
     public int getDistanceDifference() throws IOException {
-        var meassurePoint = dataHandler.getJsonData().getLatest();
-        return (int) (meassurePoint.getAllowedDistance() - meassurePoint.distance);
+        var histories = dataHandler.getJsonData().sortedHistories();
+        if (histories.length == 0) {
+            return 0;
+        }
+        var day = histories[histories.length - 1];
+        return (int) (day.getAllowedDistance() - day.distance);
     }
 
     public float getDistancePerDay() throws IOException {
@@ -76,7 +80,7 @@ public class Vehicle {
     }
 
     public History[] getHistories() throws IOException {
-        return dataHandler.getJsonData().getSortedHistories();
+        return dataHandler.getJsonData().sortedHistories();
     }
 
     public Trend calculateTrend() throws IOException {

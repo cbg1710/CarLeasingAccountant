@@ -50,12 +50,7 @@ public class JsonData {
         return histories.clone();
     }
 
-    public History getLatest() {
-        var sorted = getSortedHistories();
-        return sorted[sorted.length - 1];
-    }
-
-    public History[] getSortedHistories() {
+    public History[] sortedHistories() {
         List<History> result = new ArrayList<>();
         Arrays.stream(histories).sorted((h1, h2) -> h1.getDate().compareTo(h2.getDate()))
                 .forEachOrdered(result::add);
@@ -75,7 +70,7 @@ public class JsonData {
     }
 
     public Trend calculateTrend() {
-        var meassurePoints = Arrays.asList(getSortedHistories());
+        var meassurePoints = Arrays.asList(sortedHistories());
         if (meassurePoints.size() < 2) {
             return new Trend(TrendType.NO_TREND, 0);
         }
