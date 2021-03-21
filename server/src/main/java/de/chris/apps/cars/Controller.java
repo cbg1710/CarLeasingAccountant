@@ -4,7 +4,7 @@ import de.chris.apps.cars.entitiy.NewVehicle;
 import de.chris.apps.cars.entitiy.Overview;
 import de.chris.apps.cars.entitiy.VehicleEntity;
 import de.chris.apps.cars.vehicle.History;
-import de.chris.apps.cars.vehicle.Trend;
+import de.chris.apps.cars.entitiy.Trend;
 import de.chris.apps.cars.vehicle.Vehicle;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
