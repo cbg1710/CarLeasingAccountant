@@ -1,3 +1,3 @@
 #!/bin/sh
 
-docker build -f Dockerfile -t glaesec/leasing-accountant-ui:latest .
+docker build -f Dockerfile -t glaesec/leasing-accountant:latest .
