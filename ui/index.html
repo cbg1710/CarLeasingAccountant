@@ -13,6 +13,8 @@
         crossorigin="anonymous"></script>
         <script src="home.js"></script>
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.1.0/chart.min.js" integrity="sha512-RGbSeD/jDcZBWNsI1VCvdjcDULuSfWTtIva2ek5FtteXeSjLfXac4kqkDRHVGf1TwsXCAqPTF7/EYITD0/CTqw==" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -49,20 +51,91 @@
                             <p class="card-text">
                                 <span id="distancediffword"></span> gefahren als geplant.<br/>
                     </div>
+                    
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text">
                             Trend <strong><span id="trendword"></span></strong>. 
                             Gestern bist du <span id="trenddiffcount"></span> km <span id="trenddiffword"></span> gefahren als im Durchschnitt in den letzten 7 Tagen.
+                            <canvas id="myChart"></canvas>
+                            <script>
+                            var date = new Date()
+                            date.setDate(date.getDate() - 1);
+                            console.log(date.getDate());
+                            console.log(date.getMonth());
+
+                            var ctx = document.getElementById('myChart');
+                            var myChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    color: '#f6f6e9',
+                                    labels: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'],
+                                    datasets: [{
+                                        label: 'Unterschied zu geplant (in km)',
+                                        data: [-12, null, -3, 5, -2, 3, -1],
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                            'rgba(75, 192, 192, 0.2)',
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                            'rgba(75, 192, 192, 1)',
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                            </script>
                         </p>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
                         <p class="card-text">
-                            Noch <strong><span id="remainingDistance"></span> km</strong> übrig bis zur Abgabe in <span id="remainingDays"></span> Tagen.
                             Der aktuelle Kilometer-Stand beträgt <strong><span id="currentOdometer"></span> km</strong>.
+                            Noch <strong><span id="remainingDistance"></span> km</strong> übrig bis zur Abgabe in <span id="remainingDays"></span> Tagen.
+                            <canvas id="myChart2"></canvas>
+                            <script>
+                            var date = new Date()
+                            date.setDate(date.getDate() - 1);
+                            console.log(date.getDate());
+                            console.log(date.getMonth());
+
+                            var ctx = document.getElementById('myChart2');
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    color: '#f6f6e9',
+                                    labels: ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'],
+                                    datasets: [{
+                                        label: 'Kilometerstand',
+                                        data: [1,300,400,500,700,900, 1000],
+                                        backgroundColor: [
+                                            'rgba(255, 99, 132, 0.2)',
+                                        ],
+                                        borderColor: [
+                                            'rgba(255, 99, 132, 1)',
+                                        ],
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            });
+                            </script>
                         </p>
                     </div>
                 </div>
