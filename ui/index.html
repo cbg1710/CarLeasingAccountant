@@ -1,4 +1,7 @@
 <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="kmtracker">
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
@@ -44,12 +47,15 @@
                             <i class="bi bi-caret-down-fill"></i>
                             </h5>
                             <p class="card-text"><span id="distancediffword"></span> gefahren als geplant.<br />
-                                Trend comig soon.</p>
+                                Trend <span id="distancedifftrend"></span>.</p>
                     </div>
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-text">Noch <strong><span id="remainingDistance"></span>km</strong> übrig bis zur Abgabe in <span id="remainingDays"></span> Tagen.</p>
+                        <p class="card-text">
+                            Noch <strong><span id="remainingDistance"></span> km</strong> übrig bis zur Abgabe in <span id="remainingDays"></span> Tagen.
+                            Der aktuelle Kilometer-Stand beträgt <strong><span id="currentOdometer"></span> km</strong>.
+                        </p>
                     </div>
                 </div>
                 <div class="card">

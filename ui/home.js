@@ -11,10 +11,38 @@ function getdistancediff(vin) {
     distancediff.send();
 }
 
+function getdistancedifftrend(vin) {
+    var distancedifftrend = new XMLHttpRequest();
+    distancedifftrend.onreadystatechange = function() {
+         if (this.readyState == 4 && this.status == 200) {
+            var trend = JSON.parse(this.response).type;
+            console.log(trend)
+            var trendword = "";
+            if (trend === "FALLING"){
+                trendword = "fallend"
+            }
+            if (trend === "RISING"){
+                trendword = "steigend"
+            }
+            if (trend === "STABLE"){
+                trendword = "stagnierend"
+            }
+            if (trend === "NO_TREND"){
+                trendword = "kann noch nicht berechnet werden"
+            }
+            document.getElementById("distancedifftrend").innerHTML = trendword;
+         }
+    };
+    distancedifftrend.open("GET", "http://raspberrypi:8080/trend?vin=" + vin, true);
+    distancedifftrend.setRequestHeader("Content-type", "application/json");
+    distancedifftrend.send();
+}
+
 function getvehicledata(vin) {
     var vehicledata = new XMLHttpRequest();
     vehicledata.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("currentOdometer").innerHTML = JSON.parse(this.response).currentOdometer.odometer;
             document.getElementById("remainingDistance").innerHTML = JSON.parse(this.response).remainingDistance;
             document.getElementById("remainingDays").innerHTML = JSON.parse(this.response).remainingDays;
          }
@@ -42,6 +70,7 @@ function getvin() {
          if (this.readyState == 4 && this.status == 200) {
             vin = JSON.parse(this.response)[1].vehicle
             getdistancediff(vin)
+            getdistancedifftrend(vin)
             getvehicledata(vin)
             getholiday(vin)
          }
