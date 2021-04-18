@@ -15,22 +15,24 @@ function getdistancedifftrend(vin) {
     var distancedifftrend = new XMLHttpRequest();
     distancedifftrend.onreadystatechange = function() {
          if (this.readyState == 4 && this.status == 200) {
-            var trend = JSON.parse(this.response).type;
-            console.log(trend)
+            var trend = JSON.parse(this.response);
+            trendtype = trend.type
             var trendword = "";
-            if (trend === "FALLING"){
+            if (trendtype === "FALLING"){
                 trendword = "fallend"
             }
-            if (trend === "RISING"){
+            if (trendtype === "RISING"){
                 trendword = "steigend"
             }
-            if (trend === "STABLE"){
+            if (trendtype === "STABLE"){
                 trendword = "stagnierend"
             }
-            if (trend === "NO_TREND"){
+            if (trendtype === "NO_TREND"){
                 trendword = "kann noch nicht berechnet werden"
             }
-            document.getElementById("distancedifftrend").innerHTML = trendword;
+            document.getElementById("trendword").innerHTML = trendword;
+            document.getElementById("trenddiffcount").innerHTML = trend.difference;
+            document.getElementById("trenddiffword").innerHTML = trend.difference >= 0 ? "weniger": "mehr";;
          }
     };
     distancedifftrend.open("GET", "http://raspberrypi:8080/trend?vin=" + vin, true);

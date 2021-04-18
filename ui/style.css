@@ -17,7 +17,7 @@ h1 {
 }
 
 .card {
-    background-color: #ecedd1 !important;
+    background-color: #f6f6e9 !important;
 }
 
 .bg-success {
@@ -33,7 +33,7 @@ h1 {
 
 input {
     border-radius: 0px !important;
-    background-color: #ecedd1 !important;
+    background-color: #f6f6e9 !important;
 }
 .form-check-input:checked {
     background-color: #211657 !important;
@@ -41,7 +41,7 @@ input {
 }
 
 .form-check-input {
-    background-color: #ecedd1 !important;
+    background-color: #f6f6e9 !important;
     box-shadow: 0 5px 9px 0 rgba(0,0,0,.15);
 }
 .btn,a {
@@ -50,14 +50,14 @@ input {
 }
 .btn-primary {
     background-color: #211657 !important;
-    border-color:  #ecedd1 !important;
-    color:  #ecedd1 !important;
+    border-color:  #f6f6e9 !important;
+    color:  #f6f6e9 !important;
 }
 
 .btn-secondary {
     background-color: #211657 !important;
     border-color:  #211657 !important;
-    color:  #ecedd1 !important;
+    color:  #f6f6e9 !important;
 }
 
 .autoimage {
